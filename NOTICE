@@ -51,10 +51,11 @@ Fonts
 
 fonts/D-DIN*.ttf
   D-DIN by Datto / Charles Nix (Monotype). SIL Open Font License 1.1.
-  See fonts/OFL-1.1.txt and fonts/FONTLOG.txt.
+  Regular, Italic, Bold, Condensed, Condensed Bold, Expanded, Expanded Italic,
+  Expanded Bold. See fonts/OFL-1.1.txt and fonts/FONTLOG.txt.
   https://github.com/amcchord/datto-d-din
 
 fonts/IBMPlexMono-*.ttf
-  IBM Plex Mono. SIL Open Font License 1.1.
-  See fonts/IBM-Plex-OFL.txt.
+  IBM Plex Mono complete family (Thin through Bold, with italics).
+  SIL Open Font License 1.1. See fonts/IBM-Plex-OFL.txt.
   https://github.com/IBM/plex

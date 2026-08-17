@@ -18,16 +18,72 @@ install_fonts() {
   fc-cache -f "$FONT_DIR" >/dev/null 2>&1 || true
 }
 
+grayscale_png() {
+  local src="$1" dest="$2"
+  mkdir -p "$(dirname "$dest")"
+  magick "$src" -colorspace Gray "$dest"
+}
+
+recolor_folder_svg() {
+  local src="$1" dest="$2"
+  mkdir -p "$(dirname "$dest")"
+  python3 - "$src" "$dest" <<'PY'
+import pathlib, re, sys
+src, dest = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+text = src.read_text(encoding="utf-8")
+# Adwaita folder blues -> stainless / charcoal
+repl = {
+    "#62a0ea": "#9a9a9a",
+    "#62A0EA": "#9a9a9a",
+    "#afd4ff": "#d0d0d0",
+    "#AFD4FF": "#d0d0d0",
+    "#438de6": "#7a7a7a",
+    "#438DE6": "#7a7a7a",
+    "#1c71d8": "#6a6a6a",
+    "#1C71D8": "#6a6a6a",
+    "#1a5fb4": "#5a5a5a",
+    "#1A5FB4": "#5a5a5a",
+    "#3584e4": "#8a8a8a",
+    "#3584E4": "#8a8a8a",
+    "#c0d5ea": "#c4c8cc",
+    "#C0D5EA": "#c4c8cc",
+    "#a4caee": "#b4b4b4",
+    "#A4CAEE": "#b4b4b4",
+    "#99c1f1": "#b0b0b0",
+    "#99C1F1": "#b0b0b0",
+}
+for old, new in repl.items():
+    text = text.replace(old, new)
+text = re.sub(r'stop-color="#[0-9a-fA-F]{6}"', 'stop-color="#9a9a9a"', text)
+dest.write_text(text, encoding="utf-8")
+PY
+}
+
 install_icons() {
-  [[ -d $YARU_DARK ]] || return 0
   mkdir -p "$ICON_DIR"
-  find "$YARU_DARK" -path '*/places/*' -name '*.png' -print0 |
-    while IFS= read -r -d '' src; do
-      rel="${src#"$YARU_DARK"/}"
-      dest="$ICON_DIR/$rel"
-      mkdir -p "$(dirname "$dest")"
-      magick "$src" -colorspace Gray "$dest"
-    done
+  if [[ -d $YARU_DARK ]]; then
+    find "$YARU_DARK" -path '*/places/*' \( -name '*.png' -o -name '*folder*' -o -name '*inode-directory*' \) -print0 |
+      while IFS= read -r -d '' src; do
+        rel="${src#"$YARU_DARK"/}"
+        case "$src" in
+          *.png) grayscale_png "$src" "$ICON_DIR/$rel" ;;
+        esac
+      done
+  fi
+
+  # GTK file choosers (Chromium portal) prefer Adwaita's scalable blue SVGs.
+  local adwaita
+  for adwaita in /usr/share/icons/Adwaita /usr/share/icons/AdwaitaLegacy; do
+    [[ -d $adwaita ]] || continue
+    find "$adwaita" \( -iname '*folder*' -o -iname '*inode-directory*' \) \( -name '*.png' -o -name '*.svg' \) -print0 |
+      while IFS= read -r -d '' src; do
+        rel="${src#"$adwaita"/}"
+        case "$src" in
+          *.png) grayscale_png "$src" "$ICON_DIR/$rel" ;;
+          *.svg) recolor_folder_svg "$src" "$ICON_DIR/$rel" ;;
+        esac
+      done
+  done
 
   cat >"$ICON_DIR/index.theme" <<'EOF'
 [Icon Theme]
@@ -35,7 +91,7 @@ Name=SpaceX
 Comment=Yaru-dark with grayscale folders
 Inherits=Yaru-dark,Yaru,Adwaita,hicolor
 Example=folder
-Directories=16x16/places,16x16@2x/places,24x24/places,24x24@2x/places,32x32/places,32x32@2x/places,48x48/places,48x48@2x/places,256x256/places,256x256@2x/places
+Directories=16x16/places,16x16@2x/places,16x16/mimetypes,24x24/places,24x24@2x/places,24x24/mimetypes,32x32/places,32x32@2x/places,32x32/mimetypes,48x48/places,48x48@2x/places,48x48/mimetypes,256x256/places,256x256@2x/places,scalable/places,scalable/mimetypes,symbolic/places,symbolic/mimetypes
 
 [16x16/places]
 Context=Places
@@ -95,6 +151,54 @@ Scale=2
 Type=Scalable
 MinSize=56
 MaxSize=512
+
+[scalable/places]
+Context=Places
+Size=128
+MinSize=8
+MaxSize=512
+Type=Scalable
+
+[symbolic/places]
+Context=Places
+Size=16
+MinSize=8
+MaxSize=512
+Type=Scalable
+
+[16x16/mimetypes]
+Context=MimeTypes
+Size=16
+Type=Fixed
+
+[24x24/mimetypes]
+Context=MimeTypes
+Size=24
+Type=Fixed
+
+[32x32/mimetypes]
+Context=MimeTypes
+Size=32
+Type=Fixed
+
+[48x48/mimetypes]
+Context=MimeTypes
+Size=48
+Type=Fixed
+
+[scalable/mimetypes]
+Context=MimeTypes
+Size=128
+MinSize=8
+MaxSize=512
+Type=Scalable
+
+[symbolic/mimetypes]
+Context=MimeTypes
+Size=16
+MinSize=8
+MaxSize=512
+Type=Scalable
 EOF
 
   if command -v gtk-update-icon-cache >/dev/null; then
@@ -103,34 +207,95 @@ EOF
 }
 
 write_fontconfig() {
-  mkdir -p "$HOME/.config/fontconfig"
-  # Fontconfig treats '-' in a name string as a style separator, so
-  # "D-DIN 11" would resolve as family=D. Expose a hyphen-free alias.
+  mkdir -p "$HOME/.config/fontconfig/conf.d"
+  # Fontconfig parses "D-DIN" as family=D + style=DIN, then falls back to
+  # Liberation for missing weights. Keep a hyphen-free alias and remap that
+  # split so every size stays on D-DIN.
+  cat >"$HOME/.config/fontconfig/conf.d/50-spacex.conf" <<'XML'
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <dir>~/.local/share/fonts/spacex</dir>
+
+  <match target="pattern">
+    <test name="family"><string>D</string></test>
+    <test name="style" compare="contains"><string>DIN Condensed</string></test>
+    <edit name="family" mode="assign" binding="strong"><string>D-DIN Condensed</string></edit>
+  </match>
+  <match target="pattern">
+    <test name="family"><string>D</string></test>
+    <test name="style" compare="contains"><string>DINExp</string></test>
+    <edit name="family" mode="assign" binding="strong"><string>D-DINExp</string></edit>
+  </match>
+  <match target="pattern">
+    <test name="family"><string>D</string></test>
+    <test name="style" compare="contains"><string>DIN</string></test>
+    <edit name="family" mode="assign" binding="strong"><string>D-DIN</string></edit>
+  </match>
+
+  <alias binding="strong">
+    <family>SpaceX Sans</family>
+    <prefer><family>D-DIN</family></prefer>
+    <default><family>D-DIN</family></default>
+  </alias>
+  <alias binding="same">
+    <family>D-DIN</family>
+    <default><family>D-DIN</family></default>
+  </alias>
+
+  <match target="pattern">
+    <test name="family" qual="any"><string>sans-serif</string></test>
+    <edit name="family" mode="prepend_first" binding="strong"><string>D-DIN</string></edit>
+  </match>
+  <match target="pattern">
+    <test name="family" qual="any"><string>monospace</string></test>
+    <edit name="family" mode="prepend_first" binding="strong"><string>IBM Plex Mono</string></edit>
+  </match>
+
+  <match target="font">
+    <test name="family" compare="contains"><string>D-DIN</string></test>
+    <edit name="antialias" mode="assign"><bool>true</bool></edit>
+    <edit name="hinting" mode="assign"><bool>true</bool></edit>
+    <edit name="hintstyle" mode="assign"><const>hintslight</const></edit>
+    <edit name="rgba" mode="assign"><const>rgb</const></edit>
+    <edit name="lcdfilter" mode="assign"><const>lcddefault</const></edit>
+    <edit name="embeddedbitmap" mode="assign"><bool>false</bool></edit>
+  </match>
+</fontconfig>
+XML
+
   cat >"$HOME/.config/fontconfig/fonts.conf" <<'XML'
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 <fontconfig>
+  <include ignore_missing="yes">conf.d</include>
+  <!-- "D-DIN" parses as family=D. Remap before fallback. -->
+  <match target="pattern">
+    <test name="family"><string>D</string></test>
+    <edit name="family" mode="assign" binding="strong"><string>D-DIN</string></edit>
+  </match>
   <alias>
     <family>SpaceX Sans</family>
-    <prefer>
-      <family>D-DIN</family>
-    </prefer>
+    <prefer><family>D-DIN</family></prefer>
   </alias>
   <match target="pattern">
-    <test name="family" qual="any">
-      <string>sans-serif</string>
-    </test>
-    <edit name="family" mode="prepend_first" binding="strong">
-      <string>D-DIN</string>
-    </edit>
+    <test name="family" qual="any"><string>sans-serif</string></test>
+    <edit name="family" mode="prepend_first" binding="strong"><string>D-DIN</string></edit>
   </match>
   <match target="pattern">
-    <test name="family" qual="any">
-      <string>monospace</string>
-    </test>
-    <edit name="family" mode="prepend_first" binding="strong">
-      <string>IBM Plex Mono</string>
-    </edit>
+    <test name="family" qual="any"><string>monospace</string></test>
+    <edit name="family" mode="prepend_first" binding="strong"><string>IBM Plex Mono</string></edit>
+  </match>
+  <!-- D-DIN stores styles as DIN-Bold / DIN-Italic, not Bold / Italic. -->
+  <match target="pattern">
+    <test name="family"><string>D-DIN</string></test>
+    <test name="weight" compare="more_eq"><int>200</int></test>
+    <edit name="style" mode="assign" binding="strong"><string>DIN-Bold</string></edit>
+  </match>
+  <match target="pattern">
+    <test name="family"><string>D-DIN</string></test>
+    <test name="slant" compare="not_eq"><const>roman</const></test>
+    <edit name="style" mode="assign" binding="strong"><string>DIN-Italic</string></edit>
   </match>
 </fontconfig>
 XML
@@ -161,8 +326,8 @@ apply_gsettings() {
   # Adwaita default accent is blue — that is the Chromium/GTK "Open" button.
   gsettings set org.gnome.desktop.interface accent-color "slate"
   if [[ -f $HOME/.local/share/fonts/spacex/D-DIN.ttf ]]; then
-    gsettings set org.gnome.desktop.interface font-name "SpaceX Sans 11"
-    gsettings set org.gnome.desktop.interface document-font-name "SpaceX Sans 12"
+    gsettings set org.gnome.desktop.interface font-name "SpaceX Sans 12"
+    gsettings set org.gnome.desktop.interface document-font-name "SpaceX Sans 13"
   fi
   if [[ -f $HOME/.local/share/fonts/spacex/IBMPlexMono-Regular.ttf ]]; then
     gsettings set org.gnome.desktop.interface monospace-font-name "IBM Plex Mono 11"
@@ -180,7 +345,7 @@ write_gtk_settings() {
 gtk-theme-name=Adwaita-dark
 gtk-icon-theme-name=SpaceX
 gtk-cursor-theme-name=Adwaita
-gtk-font-name=SpaceX Sans 11
+gtk-font-name=SpaceX Sans 12
 gtk-application-prefer-dark-theme=1
 EOF
   done
@@ -229,8 +394,30 @@ EOF
 EOF
 }
 
+write_portal_env() {
+  mkdir -p "$HOME/.config/environment.d"
+  cat >"$HOME/.config/environment.d/80-spacex.conf" <<'EOF'
+# omarchy-spacex
+GTK_ICON_THEME=SpaceX
+GTK_THEME=Adwaita:dark
+GTK_USE_PORTAL=1
+EOF
+
+  mkdir -p "$HOME/.config/systemd/user/xdg-desktop-portal-gtk.service.d"
+  cat >"$HOME/.config/systemd/user/xdg-desktop-portal-gtk.service.d/spacex.conf" <<'EOF'
+# omarchy-spacex
+[Service]
+Environment=GTK_THEME=Adwaita:dark
+Environment=GTK_ICON_THEME=SpaceX
+Environment=XDG_DATA_HOME=%h/.local/share
+EOF
+  systemctl --user daemon-reload >/dev/null 2>&1 || true
+}
+
 restart_file_chooser() {
+  systemctl --user daemon-reload >/dev/null 2>&1 || true
   systemctl --user restart xdg-desktop-portal-gtk.service >/dev/null 2>&1 || true
+  systemctl --user restart xdg-desktop-portal.service >/dev/null 2>&1 || true
 }
 
 restore_other_theme() {
@@ -246,6 +433,9 @@ restore_other_theme() {
   if [[ -n ${DBUS_SESSION_BUS_ADDRESS:-} ]]; then
     gsettings set org.gnome.desktop.interface accent-color "blue" || true
   fi
+  rm -f "$HOME/.config/environment.d/80-spacex.conf"
+  rm -f "$HOME/.config/systemd/user/xdg-desktop-portal-gtk.service.d/spacex.conf"
+  rm -f "$HOME/.config/fontconfig/conf.d/50-spacex.conf"
   restart_file_chooser
 }
 
@@ -261,6 +451,7 @@ write_fontconfig
 retint_terminals
 apply_gsettings
 write_gtk_settings
+write_portal_env
 restart_file_chooser
 
 printf 'SpaceX\n' >"$THEME_DIR/icons.theme"
