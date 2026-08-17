@@ -326,9 +326,11 @@ apply_gsettings() {
   # Adwaita default accent is blue — that is the Chromium/GTK "Open" button.
   gsettings set org.gnome.desktop.interface accent-color "slate"
   if [[ -f $HOME/.local/share/fonts/spacex/D-DIN.ttf ]]; then
-    gsettings set org.gnome.desktop.interface font-name "SpaceX Sans 12"
-    gsettings set org.gnome.desktop.interface document-font-name "SpaceX Sans 13"
+    gsettings set org.gnome.desktop.interface font-name "SpaceX Sans 10"
+    gsettings set org.gnome.desktop.interface document-font-name "SpaceX Sans 10"
   fi
+  gsettings set org.gnome.nautilus.icon-view default-zoom-level "small" || true
+  gsettings set org.gnome.nautilus.list-view default-zoom-level "small" || true
   if [[ -f $HOME/.local/share/fonts/spacex/IBMPlexMono-Regular.ttf ]]; then
     gsettings set org.gnome.desktop.interface monospace-font-name "IBM Plex Mono 11"
   fi
@@ -345,7 +347,7 @@ write_gtk_settings() {
 gtk-theme-name=Adwaita-dark
 gtk-icon-theme-name=SpaceX
 gtk-cursor-theme-name=Adwaita
-gtk-font-name=SpaceX Sans 12
+gtk-font-name=SpaceX Sans 10
 gtk-application-prefer-dark-theme=1
 EOF
   done
@@ -354,10 +356,10 @@ EOF
   css="$HOME/.config/gtk-3.0/gtk.css"
   cat >"$css" <<'EOF'
 /* omarchy-spacex */
-@define-color accent_bg_color #C4C8CC;
+@define-color accent_bg_color #FFFFFF;
 @define-color accent_fg_color #000000;
-@define-color accent_color #C4C8CC;
-@define-color theme_selected_bg_color #C4C8CC;
+@define-color accent_color #FFFFFF;
+@define-color theme_selected_bg_color #FFFFFF;
 @define-color theme_selected_fg_color #000000;
 
 button.suggested-action,
@@ -382,14 +384,58 @@ EOF
   css="$HOME/.config/gtk-4.0/gtk.css"
   cat >"$css" <<'EOF'
 /* omarchy-spacex */
-@define-color accent_bg_color #C4C8CC;
+@define-color accent_bg_color #FFFFFF;
 @define-color accent_fg_color #000000;
-@define-color accent_color #C4C8CC;
+@define-color accent_color #FFFFFF;
+@define-color theme_selected_bg_color #FFFFFF;
+@define-color theme_selected_fg_color #000000;
 
 :root {
-  --accent-bg-color: #C4C8CC;
+  --accent-bg-color: #FFFFFF;
   --accent-fg-color: #000000;
-  --accent-color: #C4C8CC;
+  --accent-color: #FFFFFF;
+}
+
+window.nautilus-window,
+.nautilus-window {
+  font-size: 10px;
+}
+
+.nautilus-window .sidebar {
+  font-size: 10px;
+}
+
+gridview,
+.nautilus-grid-view,
+.nautilus-list-view,
+listview {
+  font-size: 10px;
+}
+
+gridview > child image,
+.nautilus-grid-view image {
+  -gtk-icon-size: 32px;
+}
+
+gridview > child:selected,
+gridview > child:selected:hover,
+.nautilus-grid-view > child:selected,
+listview > row:selected,
+.nautilus-list-view row:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+  outline-color: #000000;
+}
+
+gridview > child:selected label,
+gridview > child:selected .dim-label,
+listview > row:selected label {
+  color: #000000;
+}
+
+gridview > child:selected image,
+.nautilus-grid-view > child:selected image {
+  color: #000000;
 }
 EOF
 }
