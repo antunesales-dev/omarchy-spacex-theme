@@ -35,6 +35,7 @@ SpaceX’s public face is **D-DIN** (DIN 1451, SIL OFL). This theme ships it and
 | GTK / Files / documents | D-DIN (aliased as SpaceX Sans) | Closest legal match to the SpaceX wordmark |
 | Terminals + Omarchy bar | IBM Plex Mono | Industrial mono; D-DIN is not monospaced |
 | Cursor | Adwaita | Already black and white |
+| Chromium / GTK file picker | SpaceX icons + slate/stainless buttons | Portal was still Adwaita blue |
 
 After install, run `~/.config/omarchy/themes/spacex/apply-identity.sh` (or switch to the theme again). A `theme-set` hook re-applies this on every SpaceX theme switch.
 
@@ -78,7 +79,7 @@ Still optional if you want to go further:
 | Hyprland gaps / border width | `hyprland.lua` |
 | Neovim | generated `aether.nvim` from the palette |
 | VS Code | generated theme JSON, or a `vscode.json` marketplace id |
-| Chromium / GTK | already Adwaita-dark; extra `gtk.css` if you want true `#000` chrome |
+| Chromium / GTK file picker | `gtk-3.0` / `gtk-4.0` settings + stainless `gtk.css` (applied by the hook) |
 | RGB keyboard | `keyboard.rgb` is already stainless |
 
 App icons (Firefox, etc.) stay colored on purpose. The SpaceX site is black/white chrome with photography doing the color — same idea.

@@ -1,5 +1,4 @@
 #!/bin/bash
-# Apply SpaceX identity (icons, D-DIN, Plex Mono) after a theme change.
-[[ ${1:-} == spacex ]] || exit 0
+# Apply or undo SpaceX identity after a theme change.
 SCRIPT="$HOME/.config/omarchy/themes/spacex/apply-identity.sh"
-[[ -x $SCRIPT ]] && exec "$SCRIPT"
+[[ -x $SCRIPT ]] && exec "$SCRIPT" "$@"

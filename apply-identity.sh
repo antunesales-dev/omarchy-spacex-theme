@@ -158,6 +158,8 @@ apply_gsettings() {
   gsettings set org.gnome.desktop.interface cursor-theme "Adwaita"
   gsettings set org.gnome.desktop.interface gtk-theme "Adwaita-dark"
   gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+  # Adwaita default accent is blue — that is the Chromium/GTK "Open" button.
+  gsettings set org.gnome.desktop.interface accent-color "slate"
   if [[ -f $HOME/.local/share/fonts/spacex/D-DIN.ttf ]]; then
     gsettings set org.gnome.desktop.interface font-name "SpaceX Sans 11"
     gsettings set org.gnome.desktop.interface document-font-name "SpaceX Sans 12"
@@ -167,10 +169,98 @@ apply_gsettings() {
   fi
 }
 
+write_gtk_settings() {
+  local dir ini css
+  for dir in "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"; do
+    mkdir -p "$dir"
+    ini="$dir/settings.ini"
+    cat >"$ini" <<'EOF'
+# omarchy-spacex
+[Settings]
+gtk-theme-name=Adwaita-dark
+gtk-icon-theme-name=SpaceX
+gtk-cursor-theme-name=Adwaita
+gtk-font-name=SpaceX Sans 11
+gtk-application-prefer-dark-theme=1
+EOF
+  done
+
+  # GTK3 file chooser (xdg-desktop-portal-gtk) used by Chromium uploads.
+  css="$HOME/.config/gtk-3.0/gtk.css"
+  cat >"$css" <<'EOF'
+/* omarchy-spacex */
+@define-color accent_bg_color #C4C8CC;
+@define-color accent_fg_color #000000;
+@define-color accent_color #C4C8CC;
+@define-color theme_selected_bg_color #C4C8CC;
+@define-color theme_selected_fg_color #000000;
+
+button.suggested-action,
+button.default,
+.suggested-action {
+  background-image: none;
+  background-color: #C4C8CC;
+  color: #000000;
+  border-color: #A7A9AC;
+}
+
+button.suggested-action:hover,
+button.default:hover,
+.suggested-action:hover {
+  background-image: none;
+  background-color: #E8E8E8;
+  color: #000000;
+}
+EOF
+
+  # GTK4 / libadwaita (newer pickers and Settings).
+  css="$HOME/.config/gtk-4.0/gtk.css"
+  cat >"$css" <<'EOF'
+/* omarchy-spacex */
+@define-color accent_bg_color #C4C8CC;
+@define-color accent_fg_color #000000;
+@define-color accent_color #C4C8CC;
+
+:root {
+  --accent-bg-color: #C4C8CC;
+  --accent-fg-color: #000000;
+  --accent-color: #C4C8CC;
+}
+EOF
+}
+
+restart_file_chooser() {
+  systemctl --user restart xdg-desktop-portal-gtk.service >/dev/null 2>&1 || true
+}
+
+restore_other_theme() {
+  local dir
+  for dir in "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"; do
+    if [[ -f $dir/settings.ini ]] && grep -q '^# omarchy-spacex' "$dir/settings.ini"; then
+      rm -f "$dir/settings.ini"
+    fi
+    if [[ -f $dir/gtk.css ]] && grep -q 'omarchy-spacex' "$dir/gtk.css"; then
+      rm -f "$dir/gtk.css"
+    fi
+  done
+  if [[ -n ${DBUS_SESSION_BUS_ADDRESS:-} ]]; then
+    gsettings set org.gnome.desktop.interface accent-color "blue" || true
+  fi
+  restart_file_chooser
+}
+
+THEME_NAME="${1:-spacex}"
+if [[ $THEME_NAME != spacex ]]; then
+  restore_other_theme
+  exit 0
+fi
+
 install_fonts
 install_icons
 write_fontconfig
 retint_terminals
 apply_gsettings
+write_gtk_settings
+restart_file_chooser
 
 printf 'SpaceX\n' >"$THEME_DIR/icons.theme"
