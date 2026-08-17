@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "spacex.network",
+  "name": "SpaceX Network",
+  "version": "1.1.0",
+  "author": "Omarchy / SpaceX theme",
+  "description": "Wi-Fi list with a Starlink easter egg when that SSID is live",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "SpaceX Network",
+    "description": "Wi-Fi list with a Starlink easter egg when that SSID is live",
+    "category": "Network",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.network"
+  }
+}

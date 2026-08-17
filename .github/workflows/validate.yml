@@ -24,6 +24,17 @@ jobs:
           test -f LICENSE
           test -f NOTICE
           test -f preview.png
+          test -x apply-identity.sh
+          test -x scripts/fetch-spacex-launches.sh
+          test -f extras/plugins/clock/Panel.qml
+          test -f extras/plugins/clock/Model.js
+          test -f extras/plugins/clock/BarWidget.qml
+          test -f extras/plugins/clock/manifest.json
+          test -f extras/plugins/network/Panel.qml
+          test -f extras/plugins/network/Model.js
+          test -f extras/plugins/network/manifest.json
+          test -f lock-designs/Pad.qml
+          test -f lock-designs/Cinema.qml
           python3 - <<'PY'
           from pathlib import Path
           text = Path("colors.toml").read_text(encoding="utf-8")

@@ -59,3 +59,24 @@ fonts/IBMPlexMono-*.ttf
   IBM Plex Mono complete family (Thin through Bold, with italics).
   SIL Open Font License 1.1. See fonts/IBM-Plex-OFL.txt.
   https://github.com/IBM/plex
+
+Plugin overlays
+---------------
+
+extras/plugins/clock and extras/plugins/network are modified copies of the
+first-party Omarchy clock and network shell plugins.
+
+  Author: Omarchy / Basecamp
+  License: MIT
+  https://github.com/basecamp/omarchy
+
+This theme rewrites the clone id to <user>.clock / <user>.network at apply
+time and adds a Launch Library 2 calendar plus a Starlink SSID easter egg.
+
+Launch data is fetched at runtime from The Space Devs Launch Library 2
+(https://ll.thespacedevs.com/) and cached under ~/.cache/omarchy-spacex/.
+It is not shipped in this repository.
+
+Lock Screen Explorer (https://github.com/SirJul1337/omarchy-lock-explorer)
+is a recommended third-party plugin. apply-identity.sh installs it from that
+upstream URL when it is missing; this repository does not vendor its code.

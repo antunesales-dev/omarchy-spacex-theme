@@ -1,6 +1,7 @@
 #!/bin/bash
 # Apply SpaceX chrome that colors.toml cannot set: grayscale folders,
-# D-DIN UI type, IBM Plex Mono in terminals, Adwaita cursor.
+# D-DIN UI type, IBM Plex Mono in terminals, Adwaita cursor, clock/network
+# overlays, lock designs, and a launch cache.
 set -euo pipefail
 
 THEME_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -466,6 +467,180 @@ restart_file_chooser() {
   systemctl --user restart xdg-desktop-portal.service >/dev/null 2>&1 || true
 }
 
+ensure_theme_hook() {
+  local src="$THEME_DIR/hooks/theme-set.sh"
+  local dest="$HOME/.config/omarchy/hooks/theme-set.d/theme-set.sh"
+  [[ -f $src ]] || return 0
+  mkdir -p "$(dirname "$dest")"
+  cp -f "$src" "$dest"
+  chmod 755 "$dest"
+}
+
+plugin_user_id() {
+  local source_id="$1"
+  printf '%s.%s\n' "${USER:-$(id -un)}" "${source_id#omarchy.}"
+}
+
+ensure_cloned_plugin() {
+  local source_id="$1"
+  local dest_id dest
+  dest_id="$(plugin_user_id "$source_id")"
+  dest="$HOME/.config/omarchy/plugins/$dest_id"
+  [[ -d $dest ]] && return 0
+
+  mkdir -p "$HOME/.config/omarchy/plugins"
+  if command -v omarchy >/dev/null && omarchy plugin clone "$source_id" >/dev/null 2>&1; then
+    [[ -d $dest ]] && return 0
+  fi
+
+  local source_dir=""
+  if command -v omarchy-plugin-catalog >/dev/null; then
+    source_dir="$(omarchy-plugin-catalog | jq -r --arg id "$source_id" '
+      [.[] | select(.firstParty and .id == $id) | .sourceDir][0] // empty
+    ')"
+  fi
+  [[ -n $source_dir && -d $source_dir ]] || return 1
+
+  mkdir -p "$dest"
+  cp -aL "$source_dir/." "$dest/"
+  if [[ -f $dest/manifest.json ]] && command -v jq >/dev/null; then
+    jq --arg id "$dest_id" --arg sourceId "$source_id" --arg name "My ${source_id#omarchy.}" '
+      .id = $id
+      | .name = $name
+      | if (.barWidget | type) == "object" then .barWidget.displayName = $name else . end
+      | .omarchy = ((.omarchy // {}) + {clonedFrom: $sourceId})
+      | del(.omarchy.clonePaths)
+    ' "$dest/manifest.json" >"$dest/manifest.json.tmp"
+    mv "$dest/manifest.json.tmp" "$dest/manifest.json"
+  fi
+}
+
+overlay_plugin() {
+  local extra_dir="$1"
+  local source_id="$2"
+  local dest_id dest file
+  dest_id="$(plugin_user_id "$source_id")"
+  dest="$HOME/.config/omarchy/plugins/$dest_id"
+  [[ -d $extra_dir ]] || return 0
+  ensure_cloned_plugin "$source_id" || return 0
+
+  shopt -s nullglob
+  for file in "$extra_dir"/*; do
+    case "$(basename "$file")" in
+      manifest.json) continue ;;
+    esac
+    cp -f "$file" "$dest/"
+  done
+  shopt -u nullglob
+
+  if [[ -f $extra_dir/manifest.json ]] && command -v jq >/dev/null; then
+    jq --arg id "$dest_id" --arg sourceId "$source_id" '
+      .id = $id
+      | .omarchy = ((.omarchy // {}) + {clonedFrom: $sourceId})
+    ' "$extra_dir/manifest.json" >"$dest/manifest.json"
+  fi
+
+  if command -v omarchy-shell >/dev/null; then
+    omarchy-shell shell rescanPlugins >/dev/null 2>&1 || true
+  fi
+  if command -v omarchy >/dev/null; then
+    omarchy plugin enable "$dest_id" >/dev/null 2>&1 || true
+  fi
+}
+
+apply_bar_spacex_widgets() {
+  local clock_id network_id
+  clock_id="$(plugin_user_id omarchy.clock)"
+  network_id="$(plugin_user_id omarchy.network)"
+  python3 - "$clock_id" "$network_id" <<'PY'
+import json
+import pathlib
+import sys
+
+clock_id, network_id = sys.argv[1], sys.argv[2]
+path = pathlib.Path.home() / ".config/omarchy/shell.json"
+if not path.exists():
+    raise SystemExit(0)
+data = json.loads(path.read_text(encoding="utf-8"))
+bar = data.setdefault("bar", {})
+layout = bar.setdefault("layout", {})
+
+
+def item_id(item):
+    if isinstance(item, dict):
+        return item.get("id")
+    return item
+
+
+def replace_or_insert(section, old, new, extra=None, after_id=None, before_id=None):
+    items = layout.setdefault(section, [])
+    found = False
+    for item in items:
+        iid = item_id(item)
+        if iid in (old, new) and isinstance(item, dict):
+            item["id"] = new
+            if extra:
+                for key, value in extra.items():
+                    item.setdefault(key, value)
+            found = True
+        elif iid in (old, new):
+            found = True
+    if found:
+        return
+    obj = {"id": new}
+    if extra:
+        obj.update(extra)
+    ids = [item_id(item) for item in items]
+    if after_id in ids:
+        items.insert(ids.index(after_id) + 1, obj)
+        return
+    if before_id in ids:
+        items.insert(ids.index(before_id), obj)
+        return
+    items.append(obj)
+
+
+replace_or_insert(
+    "center",
+    "omarchy.clock",
+    clock_id,
+    extra={
+        "format": "ddd d MMM HH:mm",
+        "formatAlt": "HH:mm:ss",
+        "verticalFormat": "HH\n—\nmm",
+    },
+    before_id="omarchy.weather",
+)
+replace_or_insert(
+    "right",
+    "omarchy.network",
+    network_id,
+    after_id="omarchy.bluetooth",
+    before_id="omarchy.audio",
+)
+
+anchor = bar.get("centerAnchor")
+if anchor in (None, "", "omarchy.clock"):
+    bar["centerAnchor"] = clock_id
+
+path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+PY
+}
+
+install_plugin_overlays() {
+  overlay_plugin "$THEME_DIR/extras/plugins/clock" omarchy.clock
+  overlay_plugin "$THEME_DIR/extras/plugins/network" omarchy.network
+  apply_bar_spacex_widgets
+}
+
+install_lock_explorer() {
+  local id="io.github.sirjul1337.lock-explorer"
+  local dest="$HOME/.config/omarchy/plugins/$id"
+  [[ -d $dest ]] && return 0
+  command -v omarchy >/dev/null || return 0
+  omarchy plugin add https://github.com/SirJul1337/omarchy-lock-explorer.git --enable --yes >/dev/null 2>&1 || true
+}
+
 restore_other_theme() {
   local dir
   for dir in "$HOME/.config/gtk-3.0" "$HOME/.config/gtk-4.0"; do
@@ -508,6 +683,7 @@ if [[ $THEME_NAME != spacex ]]; then
   exit 0
 fi
 
+ensure_theme_hook
 install_fonts
 install_icons
 write_fontconfig
@@ -515,6 +691,8 @@ retint_terminals
 apply_gsettings
 write_gtk_settings
 write_portal_env
+install_plugin_overlays
+install_lock_explorer
 apply_lock_and_brand
 restart_file_chooser
 

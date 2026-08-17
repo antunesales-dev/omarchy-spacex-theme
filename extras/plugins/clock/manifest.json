@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "spacex.clock",
+  "name": "SpaceX Clock",
+  "version": "1.1.0",
+  "author": "Omarchy / SpaceX theme",
+  "description": "Date/time with a calendar of past and upcoming SpaceX flights",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "SpaceX Clock",
+    "description": "Date/time with a calendar of past and upcoming SpaceX flights",
+    "category": "Time",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.clock"
+  }
+}
