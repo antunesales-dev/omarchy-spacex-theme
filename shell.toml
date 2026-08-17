@@ -1,0 +1,148 @@
+# SpaceX HUD chrome. Replaces the generated shell.toml.
+
+[bar]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#F5F5F5"
+active           = "#FFFFFF"
+scale-with-font  = true
+size-horizontal  = 24
+size-vertical    = 26
+
+[hyprland]
+active-border            = "rgba(c4c8ccee) rgba(ffffffff)"
+active-border-foreground = "#C4C8CC"
+
+[controls]
+normal-color        = "#C4C8CC"
+normal-fill-alpha   = 0.0
+normal-border       = "#C4C8CC"
+normal-border-width = 1
+normal-border-alpha = 0.35
+
+hover-cursor-color        = "#FFFFFF"
+hover-cursor-fill-alpha   = 0.06
+hover-cursor-border       = "#FFFFFF"
+hover-cursor-border-width = 1
+hover-cursor-border-alpha = 0.7
+
+focus-color        = "#FFFFFF"
+focus-fill-alpha   = 0.06
+focus-border       = "#FFFFFF"
+focus-border-width = 1
+focus-border-alpha = 0.7
+
+selected-color        = "#000000"
+selected-fill-alpha   = 1.0
+selected-border       = "#C4C8CC"
+selected-border-width = 1
+selected-border-alpha = 1.0
+
+pressed-fill-alpha   = 0.18
+selection-fill-alpha = 0.28
+
+[spacing]
+scale = 0.92
+scale-with-font = true
+control-height = 26
+popup-row-height = 26
+control-padding-x = 8
+control-padding-y = 4
+popup-padding = 10
+panel-padding = 12
+row-padding-x = 10
+
+[font]
+base-size = 12
+caption = 10
+body-small = 11
+body = 12
+subtitle = 12
+title = 13
+heading = 15
+
+[popups]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#F5F5F5"
+border           = "#C4C8CC"
+border-alpha     = 0.85
+border-width     = 1
+
+[tooltip]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#C4C8CC"
+border           = "#C4C8CC"
+border-alpha     = 0.55
+
+[notifications]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#F5F5F5"
+border           = "#C4C8CC"
+border-alpha     = 0.85
+border-width     = 1
+countdown        = "#C4C8CC"
+
+[launcher]
+background                = "#000000"
+background-alpha          = 1.0
+text                      = "#F5F5F5"
+border                    = "#C4C8CC"
+border-alpha              = 0.85
+scrim                     = "#000000"
+scrim-alpha               = 0.72
+selected-background       = "#C4C8CC"
+selected-background-alpha = 1.0
+selected-text             = "#000000"
+selected-border           = "#FFFFFF"
+selected-border-alpha     = 1.0
+
+[menu]
+background                = "#000000"
+background-alpha          = 1.0
+text                      = "#F5F5F5"
+border                    = "#C4C8CC"
+border-alpha              = 0.85
+scrim                     = "#000000"
+scrim-alpha               = 0.72
+selected-background       = "#C4C8CC"
+selected-background-alpha = 1.0
+selected-text             = "#000000"
+selected-border           = "#FFFFFF"
+selected-border-alpha     = 1.0
+
+[polkit]
+background       = "#000000"
+background-alpha = 1.0
+text             = "#F5F5F5"
+text-error       = "#D0D0D0"
+border           = "#C4C8CC"
+border-error     = "#FFFFFF"
+border-alpha     = 1.0
+scrim            = "#000000"
+scrim-alpha      = 0.72
+accent           = "#C4C8CC"
+
+[lock]
+background       = "#000000"
+background-alpha = 0.92
+text             = "#F5F5F5"
+placeholder      = "#6B6B6B"
+text-error       = "#D0D0D0"
+border           = "#5A5A5A"
+border-active    = "#C4C8CC"
+border-error     = "#FFFFFF"
+border-alpha     = 1.0
+selection        = "#C4C8CC"
+selection-alpha  = 0.35
+
+[image-picker]
+scrim                   = "#000000"
+scrim-alpha             = 0.72
+text                    = "#F5F5F5"
+selected-border         = "#C4C8CC"
+selected-border-alpha   = 1.0
+unselected-border       = "#F5F5F5"
+unselected-border-alpha = 0.22
