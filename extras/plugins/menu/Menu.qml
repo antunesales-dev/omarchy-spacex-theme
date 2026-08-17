@@ -1289,12 +1289,11 @@ Item {
                   width: parent.width
                   text: row.detail
                   visible: (root.filterText || row.kind === "dmenu") && row.detail.length > 0
-                  // Unselected: stainless on black. Selected: charcoal on white.
-                  // Stock used 52% white, which disappears on both surfaces.
-                  color: row.hasCursor ? "#333333" : "#C4C8CC"
+                  color: row.hasCursor ? "#000000" : "#FFFFFF"
                   opacity: 1.0
                   font.family: root.fontFamily
-                  font.pixelSize: Style.font.bodySmall
+                  font.pixelSize: Style.font.body
+                  font.weight: Font.Medium
                   elide: Text.ElideRight
                 }
               }

@@ -56,7 +56,7 @@ Cycle with `omarchy theme bg next`. Photo licenses and authors are in [NOTICE](N
 
 HUD chrome (`shell.toml`): slimmer black bar, 1px stainless hairlines, white-on-black selected rows in menus and the launcher, opaque notification cards, heavier scrim. Windows get 1px steel borders and tighter gaps (`hyprland.lua`).
 
-Files (Nautilus) uses 12px type, 32px icons, and white selection with black labels. The Chromium / portal file chooser gets the same SpaceX icon theme and stainless suggested buttons. Menu search categories (Apps, Files, …) render in stainless instead of a 50% wash.
+Files (Nautilus) uses 12px type, 32px icons, and white selection with black labels. The Chromium / portal file chooser gets the same SpaceX icon theme and stainless suggested buttons. Menu search categories (Apps, Files, …) use the same white/black as the row title. After changing the menu overlay, run `omarchy restart shell` — the menu stays loaded and will not pick up QML until the shell restarts.
 
 ### Clock calendar
 
