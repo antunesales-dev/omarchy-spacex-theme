@@ -439,6 +439,20 @@ restore_other_theme() {
   restart_file_chooser
 }
 
+apply_lock_and_brand() {
+  mkdir -p "$HOME/.config/omarchy/branding" "$HOME/.config/omarchy/lock-designs"
+  if [[ -f $THEME_DIR/branding/screensaver.txt ]]; then
+    cp "$THEME_DIR/branding/screensaver.txt" "$HOME/.config/omarchy/branding/screensaver.txt"
+  fi
+  if [[ -f $THEME_DIR/lock-designs/Pad.qml ]]; then
+    cp "$THEME_DIR/lock-designs/Pad.qml" "$HOME/.config/omarchy/lock-designs/Pad.qml"
+    if command -v omarchy-shell >/dev/null && [[ -d $HOME/.config/omarchy/plugins/io.github.sirjul1337.lock-explorer ]]; then
+      omarchy-shell lock rescanDesigns >/dev/null 2>&1 || true
+      omarchy-shell lock setDesign my-pad >/dev/null 2>&1 || true
+    fi
+  fi
+}
+
 THEME_NAME="${1:-spacex}"
 if [[ $THEME_NAME != spacex ]]; then
   restore_other_theme
@@ -452,6 +466,7 @@ retint_terminals
 apply_gsettings
 write_gtk_settings
 write_portal_env
+apply_lock_and_brand
 restart_file_chooser
 
 printf 'SpaceX\n' >"$THEME_DIR/icons.theme"

@@ -67,7 +67,15 @@ Omarchy generates terminal, Hyprland, Neovim, and shell colors from `colors.toml
 
 ## What else can be matched
 
-Already in this theme: palette, grayscale folders, D-DIN UI, Plex Mono, Adwaita cursor, stainless window border, real hardware wallpapers.
+Already in this theme: palette, grayscale folders, D-DIN UI, Plex Mono, Adwaita cursor, stainless window border, real hardware wallpapers, **Pad lock screen**, rocket screensaver, unlock glyph.
+
+The [Lock Screen Explorer](https://github.com/SirJul1337/omarchy-lock-explorer) plugin is recommended. This theme ships `lock-designs/Pad.qml` (letterbox + T+ clock over the catch wallpaper). Browse the other designs with:
+
+```bash
+omarchy-shell lock explore
+```
+
+Screensaver branding is a Starship ASCII that TTE animates. Preview with Super+Escape or `omarchy screensaver`.
 
 Still optional if you want to go further:
 
