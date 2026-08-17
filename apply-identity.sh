@@ -444,8 +444,8 @@ apply_lock_and_brand() {
   if [[ -f $THEME_DIR/branding/screensaver.txt ]]; then
     cp "$THEME_DIR/branding/screensaver.txt" "$HOME/.config/omarchy/branding/screensaver.txt"
   fi
-  if [[ -f $THEME_DIR/lock-designs/Pad.qml ]]; then
-    cp "$THEME_DIR/lock-designs/Pad.qml" "$HOME/.config/omarchy/lock-designs/Pad.qml"
+  if [[ -d $THEME_DIR/lock-designs ]]; then
+    cp -f "$THEME_DIR"/lock-designs/*.qml "$HOME/.config/omarchy/lock-designs/" 2>/dev/null || true
     if command -v omarchy-shell >/dev/null && [[ -d $HOME/.config/omarchy/plugins/io.github.sirjul1337.lock-explorer ]]; then
       omarchy-shell lock rescanDesigns >/dev/null 2>&1 || true
       omarchy-shell lock setDesign my-pad >/dev/null 2>&1 || true

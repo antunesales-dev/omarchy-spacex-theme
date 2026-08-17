@@ -69,7 +69,7 @@ Omarchy generates terminal, Hyprland, Neovim, and shell colors from `colors.toml
 
 HUD chrome (`shell.toml`): slimmer black bar, 1px stainless hairlines, inverted steel selected rows in menus/launcher, opaque notification cards, heavier scrim. Windows get 1px steel borders and tighter gaps (`hyprland.lua`).
 
-The [Lock Screen Explorer](https://github.com/SirJul1337/omarchy-lock-explorer) plugin is recommended. This theme ships `lock-designs/Pad.qml` (letterbox + T+ clock over the catch wallpaper). Browse the other designs with:
+The [Lock Screen Explorer](https://github.com/SirJul1337/omarchy-lock-explorer) plugin is recommended. This theme ships `lock-designs/Pad.qml` (letterbox + MET clock + GO/NO-GO) and `lock-designs/Cinema.qml`. Switch with `omarchy-shell lock setDesign my-pad` or `my-cinema`. Browse the rest with:
 
 ```bash
 omarchy-shell lock explore
