@@ -1,0 +1,51 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  theme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Required files and palette keys
+        run: |
+          set -euo pipefail
+          test -f colors.toml
+          test -f icons.theme
+          test -f LICENSE
+          test -f NOTICE
+          test -f preview.png
+          python3 - <<'PY'
+          from pathlib import Path
+          text = Path("colors.toml").read_text(encoding="utf-8")
+          required = [
+              "mode", "accent", "background", "foreground",
+              "red", "green", "blue", "yellow", "cyan", "magenta",
+          ]
+          missing = [key for key in required if f"{key} =" not in text]
+          if missing:
+              raise SystemExit(f"colors.toml missing keys: {missing}")
+          if 'mode = "dark"' not in text:
+              raise SystemExit("expected mode = \"dark\"")
+          print("colors.toml ok")
+          PY
+
+      - name: No unexpected executables
+        run: |
+          set -euo pipefail
+          found=$(find . -type f -perm -111 \
+            ! -path './.git/*' ! -name '*.sh' || true)
+          if [ -n "$found" ]; then
+            echo "unexpected executable files:"
+            echo "$found"
+            exit 1
+          fi

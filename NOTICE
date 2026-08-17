@@ -1,0 +1,47 @@
+omarchy-spacex-theme
+Copyright (c) 2026 Tiago Sales
+
+This is an unofficial community theme. It is not affiliated with, endorsed by,
+or sponsored by Space Exploration Technologies Corp. ("SpaceX") or NASA.
+
+"SpaceX" is a trademark of Space Exploration Technologies Corp. This project
+uses the name only to describe an inspired visual style.
+
+Third-party photographs
+-----------------------
+
+backgrounds/1-2015-first-landing.jpg
+  Falcon 9 first landing, LZ-1, 22 December 2015.
+  Author: SpaceX
+  License: CC0 1.0
+  https://commons.wikimedia.org/wiki/File:Falcon_9_first_stage_at_LZ-1_(23827554109).jpg
+
+backgrounds/2-2018-heavy-twins.jpg
+  Falcon Heavy side boosters landing, LZ-1 and LZ-2, 6 February 2018.
+  Author: SpaceX
+  License: CC0 1.0
+  https://commons.wikimedia.org/wiki/File:FH_Booster_Landing.jpg
+
+backgrounds/3-2020-demo2-crew.jpg
+  Crew Dragon Demo-2 launch from LC-39A, 30 May 2020.
+  Author: NASA / Joel Kowsky
+  License: Public domain (NASA)
+  https://commons.wikimedia.org/wiki/File:SpaceX_Demo-2_Launch_(NHQ202005300049).jpg
+
+backgrounds/4-2021-sn20-tiles.jpg
+  Starship SN20 heat-shield tiles and 301 stainless steel, 5 September 2021.
+  Author: Lars Plougmann
+  License: CC BY-SA 2.0
+  https://commons.wikimedia.org/wiki/File:Starship_SN20_getting_a_tile_inspection.jpg
+  Changes: converted to grayscale, cropped to 16:9.
+
+backgrounds/5-2024-ift5-catch.jpg
+  Super Heavy Booster 12 approaching the chopsticks, Starship Flight 5,
+  13 October 2024.
+  Author: Steve Jurvetson
+  License: CC BY 2.0
+  https://commons.wikimedia.org/wiki/File:Starship_Booster_Return_on_Final_Approach_(54063904149).jpg
+  Changes: converted to grayscale, cropped to 16:9.
+
+preview.png is derived from the Flight 5 catch photograph (Steve Jurvetson,
+CC BY 2.0) with the same grayscale and crop treatment.

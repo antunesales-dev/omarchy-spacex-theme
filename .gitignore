@@ -1,0 +1,23 @@
+# Local / editor
+.DS_Store
+*~
+*.swp
+*.swo
+*.bak
+*.bak.*
+
+# Secrets and env (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+id_rsa
+id_ed25519
+credentials.json
+secrets.yaml
+secrets.yml
+
+# Omarchy / system
+current
+*.log
