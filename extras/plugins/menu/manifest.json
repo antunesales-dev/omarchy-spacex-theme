@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "spacex.menu",
+  "name": "SpaceX Menu",
+  "version": "1.1.0",
+  "author": "Omarchy / SpaceX theme",
+  "description": "Omarchy command menu with readable subcategory labels",
+  "kinds": [
+    "menu",
+    "bar-widget"
+  ],
+  "keepLoaded": true,
+  "entryPoints": {
+    "menu": "Menu.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "SpaceX Menu",
+    "description": "Launches the Omarchy menu",
+    "category": "Compositor",
+    "allowMultiple": false
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.menu"
+  }
+}

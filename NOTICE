@@ -63,8 +63,8 @@ fonts/IBMPlexMono-*.ttf
 Plugin overlays
 ---------------
 
-extras/plugins/clock and extras/plugins/network are modified copies of the
-first-party Omarchy clock and network shell plugins.
+extras/plugins/clock, extras/plugins/network, and extras/plugins/menu are
+modified copies of the first-party Omarchy clock, network, and menu plugins.
 
   Author: Omarchy / Basecamp
   License: MIT

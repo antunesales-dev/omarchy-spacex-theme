@@ -327,8 +327,8 @@ apply_gsettings() {
   # Adwaita default accent is blue — that is the Chromium/GTK "Open" button.
   gsettings set org.gnome.desktop.interface accent-color "slate"
   if [[ -f $HOME/.local/share/fonts/spacex/D-DIN.ttf ]]; then
-    gsettings set org.gnome.desktop.interface font-name "SpaceX Sans 10"
-    gsettings set org.gnome.desktop.interface document-font-name "SpaceX Sans 10"
+    gsettings set org.gnome.desktop.interface font-name "SpaceX Sans 12"
+    gsettings set org.gnome.desktop.interface document-font-name "SpaceX Sans 12"
   fi
   gsettings set org.gnome.nautilus.icon-view default-zoom-level "small" || true
   gsettings set org.gnome.nautilus.list-view default-zoom-level "small" || true
@@ -348,7 +348,7 @@ write_gtk_settings() {
 gtk-theme-name=Adwaita-dark
 gtk-icon-theme-name=SpaceX
 gtk-cursor-theme-name=Adwaita
-gtk-font-name=SpaceX Sans 10
+gtk-font-name=SpaceX Sans 12
 gtk-application-prefer-dark-theme=1
 EOF
   done
@@ -398,24 +398,38 @@ EOF
 }
 
 window.nautilus-window,
-.nautilus-window {
-  font-size: 10px;
+.nautilus-window,
+.nautilus-window label,
+.nautilus-window .sidebar,
+.nautilus-window .sidebar label,
+.nautilus-window .icon-ui-labels-box,
+.nautilus-window .icon-ui-labels-box label,
+.nautilus-window .column-name-labels-box,
+.nautilus-window .column-name-labels-box label {
+  font-size: 12px;
 }
 
-.nautilus-window .sidebar {
-  font-size: 10px;
+/* Nautilus 50 "small" zoom is still 48px. Cap the custom icon widget. */
+.nautilus-grid-view gridview > child {
+  padding: 2px 4px;
 }
 
-gridview,
-.nautilus-grid-view,
-.nautilus-list-view,
-listview {
-  font-size: 10px;
-}
-
-gridview > child image,
-.nautilus-grid-view image {
+.nautilus-grid-view image,
+.nautilus-grid-view NautilusImage {
   -gtk-icon-size: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+}
+
+.nautilus-list-view image,
+.nautilus-list-view NautilusImage {
+  -gtk-icon-size: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
 }
 
 gridview > child:selected,
@@ -549,15 +563,16 @@ overlay_plugin() {
 }
 
 apply_bar_spacex_widgets() {
-  local clock_id network_id
+  local clock_id network_id menu_id
   clock_id="$(plugin_user_id omarchy.clock)"
   network_id="$(plugin_user_id omarchy.network)"
-  python3 - "$clock_id" "$network_id" <<'PY'
+  menu_id="$(plugin_user_id omarchy.menu)"
+  python3 - "$clock_id" "$network_id" "$menu_id" <<'PY'
 import json
 import pathlib
 import sys
 
-clock_id, network_id = sys.argv[1], sys.argv[2]
+clock_id, network_id, menu_id = sys.argv[1], sys.argv[2], sys.argv[3]
 path = pathlib.Path.home() / ".config/omarchy/shell.json"
 if not path.exists():
     raise SystemExit(0)
@@ -618,6 +633,7 @@ replace_or_insert(
     after_id="omarchy.bluetooth",
     before_id="omarchy.audio",
 )
+replace_or_insert("left", "omarchy.menu", menu_id)
 
 anchor = bar.get("centerAnchor")
 if anchor in (None, "", "omarchy.clock"):
@@ -630,6 +646,7 @@ PY
 install_plugin_overlays() {
   overlay_plugin "$THEME_DIR/extras/plugins/clock" omarchy.clock
   overlay_plugin "$THEME_DIR/extras/plugins/network" omarchy.network
+  overlay_plugin "$THEME_DIR/extras/plugins/menu" omarchy.menu
   apply_bar_spacex_widgets
 }
 

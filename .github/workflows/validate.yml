@@ -33,6 +33,10 @@ jobs:
           test -f extras/plugins/network/Panel.qml
           test -f extras/plugins/network/Model.js
           test -f extras/plugins/network/manifest.json
+          test -f extras/plugins/menu/Menu.qml
+          test -f extras/plugins/menu/MenuModel.js
+          test -f extras/plugins/menu/BarWidget.qml
+          test -f extras/plugins/menu/manifest.json
           test -f lock-designs/Pad.qml
           test -f lock-designs/Cinema.qml
           python3 - <<'PY'

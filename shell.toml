@@ -54,8 +54,8 @@ row-padding-x = 10
 
 [font]
 base-size = 12
-caption = 10
-body-small = 11
+caption = 11
+body-small = 12
 body = 12
 subtitle = 12
 title = 13

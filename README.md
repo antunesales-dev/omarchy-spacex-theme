@@ -24,7 +24,7 @@ Update later with `omarchy theme update`.
 | Background | `#000000` |
 | Foreground | `#F5F5F5` |
 | Accent / stainless | `#C4C8CC` |
-| Muted | `#5A5A5A` |
+| Muted | `#A0A0A0` |
 | Selection | `#2A2A2A` |
 
 Syntax colors are grayscale steps. Folders use a grayscale **SpaceX** icon theme (Yaru-dark plus Adwaita folder SVGs, with Ubuntu orange and GNOME blue stripped). App icons stay inherited so brands stay recognizable.
@@ -56,7 +56,7 @@ Cycle with `omarchy theme bg next`. Photo licenses and authors are in [NOTICE](N
 
 HUD chrome (`shell.toml`): slimmer black bar, 1px stainless hairlines, white-on-black selected rows in menus and the launcher, opaque notification cards, heavier scrim. Windows get 1px steel borders and tighter gaps (`hyprland.lua`).
 
-Files (Nautilus) uses 10px type, 32px icons, and white selection with black labels. The Chromium / portal file chooser gets the same SpaceX icon theme and stainless suggested buttons.
+Files (Nautilus) uses 12px type, 32px icons, and white selection with black labels. The Chromium / portal file chooser gets the same SpaceX icon theme and stainless suggested buttons. Menu search categories (Apps, Files, …) render in stainless instead of a 50% wash.
 
 ### Clock calendar
 
@@ -94,6 +94,7 @@ fonts/                   D-DIN + IBM Plex Mono (OFL)
 backgrounds/             five dated photographs
 extras/plugins/clock     Launch Library calendar overlay
 extras/plugins/network   Starlink Wi-Fi easter egg
+extras/plugins/menu      Readable menu subcategory labels
 lock-designs/            Pad + Cinema lock screens
 scripts/                 launch cache fetcher
 ```
