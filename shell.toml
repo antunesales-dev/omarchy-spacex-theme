@@ -34,7 +34,7 @@ focus-border-alpha = 0.7
 
 selected-color        = "#000000"
 selected-fill-alpha   = 1.0
-selected-border       = "#C4C8CC"
+selected-border       = "#FFFFFF"
 selected-border-width = 1
 selected-border-alpha = 1.0
 
@@ -88,12 +88,12 @@ countdown        = "#C4C8CC"
 [launcher]
 background                = "#000000"
 background-alpha          = 1.0
-text                      = "#F5F5F5"
+text                      = "#FFFFFF"
 border                    = "#C4C8CC"
 border-alpha              = 0.85
 scrim                     = "#000000"
 scrim-alpha               = 0.72
-selected-background       = "#C4C8CC"
+selected-background       = "#FFFFFF"
 selected-background-alpha = 1.0
 selected-text             = "#000000"
 selected-border           = "#FFFFFF"
@@ -102,15 +102,15 @@ selected-border-alpha     = 1.0
 [menu]
 background                = "#000000"
 background-alpha          = 1.0
-text                      = "#F5F5F5"
+text                      = "#FFFFFF"
 border                    = "#C4C8CC"
 border-alpha              = 0.85
 scrim                     = "#000000"
 scrim-alpha               = 0.72
-selected-background       = "#C4C8CC"
+selected-background       = "#FFFFFF"
 selected-background-alpha = 1.0
 selected-text             = "#000000"
-selected-border           = "#FFFFFF"
+selected-border           = "#000000"
 selected-border-alpha     = 1.0
 
 [polkit]
