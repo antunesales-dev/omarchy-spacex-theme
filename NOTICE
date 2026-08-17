@@ -45,3 +45,16 @@ backgrounds/5-2024-ift5-catch.jpg
 
 preview.png is derived from the Flight 5 catch photograph (Steve Jurvetson,
 CC BY 2.0) with the same grayscale and crop treatment.
+
+Fonts
+-----
+
+fonts/D-DIN*.ttf
+  D-DIN by Datto / Charles Nix (Monotype). SIL Open Font License 1.1.
+  See fonts/OFL-1.1.txt and fonts/FONTLOG.txt.
+  https://github.com/amcchord/datto-d-din
+
+fonts/IBMPlexMono-*.ttf
+  IBM Plex Mono. SIL Open Font License 1.1.
+  See fonts/IBM-Plex-OFL.txt.
+  https://github.com/IBM/plex
