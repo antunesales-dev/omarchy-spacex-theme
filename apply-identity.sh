@@ -6,7 +6,7 @@ set -euo pipefail
 
 THEME_DIR="$(cd "$(dirname "$0")" && pwd)"
 FONT_DIR="$HOME/.local/share/fonts/spacex"
-ICON_DIR="$HOME/.local/share/icons/spacex"
+ICON_DIR="$HOME/.local/share/icons/SpaceX"
 YARU_DARK="/usr/share/icons/Yaru-dark"
 
 install_fonts() {
@@ -60,6 +60,63 @@ dest.write_text(text, encoding="utf-8")
 PY
 }
 
+copy_icon_file() {
+  local src="$1" dest="$2"
+  mkdir -p "$(dirname "$dest")"
+  case "$src" in
+    *.png) grayscale_png "$src" "$dest" ;;
+    *.svg) cp -f "$src" "$dest" ;;
+  esac
+}
+
+install_sidebar_icons() {
+  local name root src rel
+  local names=(
+    starred-symbolic
+    non-starred-symbolic
+    semi-starred-symbolic
+    semi-starred-rtl-symbolic
+    user-trash-symbolic
+    user-trash-full-symbolic
+    user-bookmarks-symbolic
+  )
+  local roots=(
+    /usr/share/icons/Adwaita
+    /usr/share/icons/AdwaitaLegacy
+    /usr/share/icons/Yaru
+    /usr/share/icons/Yaru-dark
+  )
+
+  for name in "${names[@]}"; do
+    src=""
+    for root in "${roots[@]}"; do
+      [[ -d $root ]] || continue
+      src="$(find "$root" \( -name "${name}.svg" -o -name "${name}.png" \) -print -quit 2>/dev/null || true)"
+      [[ -n $src ]] || continue
+      rel="${src#"$root"/}"
+      # Nautilus sidebar looks up these in the Places context. Put the
+      # glyphs in scalable/places so they are visible without declaring
+      # a Status/symbolic tree that would hide other inherited icons.
+      if [[ $src == *.svg ]]; then
+        copy_icon_file "$src" "$ICON_DIR/scalable/places/${name}.svg"
+        copy_icon_file "$src" "$ICON_DIR/scalable/status/${name}.svg"
+      elif [[ $name == user-trash-symbolic || $name == user-trash-full-symbolic ]]; then
+        copy_icon_file "$src" "$ICON_DIR/$rel"
+      fi
+      break
+    done
+  done
+
+  # Yaru-dark has no trash rasters; copy Yaru's and desaturate.
+  if [[ -d /usr/share/icons/Yaru ]]; then
+    find /usr/share/icons/Yaru \( -name 'user-trash.png' -o -name 'user-trash-full.png' \) -print0 |
+      while IFS= read -r -d '' src; do
+        rel="${src#/usr/share/icons/Yaru/}"
+        grayscale_png "$src" "$ICON_DIR/$rel"
+      done
+  fi
+}
+
 install_icons() {
   mkdir -p "$ICON_DIR"
   if [[ -d $YARU_DARK ]]; then
@@ -86,13 +143,19 @@ install_icons() {
       done
   done
 
+  install_sidebar_icons
+
+  # Incomplete symbolic/ trees hide inherited sidebar icons. Keep only
+  # scalable/status for starred/trash and places for folders.
+  rm -rf "$ICON_DIR/symbolic" "$ICON_DIR"/[0-9]*/status "$ICON_DIR"/*@2x/status "$ICON_DIR/scalable/extra"
+
   cat >"$ICON_DIR/index.theme" <<'EOF'
 [Icon Theme]
 Name=SpaceX
 Comment=Yaru-dark with grayscale folders
 Inherits=Yaru-dark,Yaru,Adwaita,hicolor
 Example=folder
-Directories=16x16/places,16x16@2x/places,16x16/mimetypes,24x24/places,24x24@2x/places,24x24/mimetypes,32x32/places,32x32@2x/places,32x32/mimetypes,48x48/places,48x48@2x/places,48x48/mimetypes,256x256/places,256x256@2x/places,scalable/places,scalable/mimetypes,symbolic/places,symbolic/mimetypes
+Directories=16x16/places,16x16@2x/places,24x24/places,24x24@2x/places,32x32/places,32x32@2x/places,48x48/places,48x48@2x/places,256x256/places,256x256@2x/places,scalable/places,scalable/status
 
 [16x16/places]
 Context=Places
@@ -160,49 +223,17 @@ MinSize=8
 MaxSize=512
 Type=Scalable
 
-[symbolic/places]
-Context=Places
-Size=16
-MinSize=8
-MaxSize=512
-Type=Scalable
-
-[16x16/mimetypes]
-Context=MimeTypes
-Size=16
-Type=Fixed
-
-[24x24/mimetypes]
-Context=MimeTypes
-Size=24
-Type=Fixed
-
-[32x32/mimetypes]
-Context=MimeTypes
-Size=32
-Type=Fixed
-
-[48x48/mimetypes]
-Context=MimeTypes
-Size=48
-Type=Fixed
-
-[scalable/mimetypes]
-Context=MimeTypes
-Size=128
-MinSize=8
-MaxSize=512
-Type=Scalable
-
-[symbolic/mimetypes]
-Context=MimeTypes
+[scalable/status]
+Context=Status
 Size=16
 MinSize=8
 MaxSize=512
 Type=Scalable
 EOF
 
-  if command -v gtk-update-icon-cache >/dev/null; then
+  if command -v gtk4-update-icon-cache >/dev/null; then
+    gtk4-update-icon-cache -f "$ICON_DIR" >/dev/null 2>&1 || true
+  elif command -v gtk-update-icon-cache >/dev/null; then
     gtk-update-icon-cache -f "$ICON_DIR" >/dev/null 2>&1 || true
   fi
 }
