@@ -428,10 +428,8 @@ EOF
   --accent-color: #FFFFFF;
 }
 
-/* Compact file labels only. Do not set font-size on the window or
- * headerbar — libadwaita sizes the sidebar header (Files + menu) and
- * the content header (pathbar) from the same em-based min-height, so a
- * window-wide 12px scale makes those two bars miss each other. */
+/* Compact file labels only. Do not set font-size on the window —
+ * that scales the two Nautilus 50 headerbars off the same em grid. */
 .nautilus-window .sidebar label,
 .nautilus-window .icon-ui-labels-box label,
 .nautilus-window .column-name-labels-box label,
@@ -440,28 +438,55 @@ EOF
   font-size: 12px;
 }
 
-/* Keep the two Nautilus 50 AdwHeaderBars on one row. */
-window.nautilus-window headerbar {
-  min-height: 48px;
-  padding-top: 6px;
-  padding-bottom: 6px;
+/* Shrink the two AdwHeaderBars together. libadwaita defaults them to
+ * 46–47px; beat toolbarview > .top-bar headerbar on specificity. */
+window.nautilus-window toolbarview > .top-bar {
+  min-height: 0;
 }
 
-window.nautilus-window headerbar button {
-  min-height: 34px;
-  min-width: 34px;
-  margin-top: 0;
-  margin-bottom: 0;
+window.nautilus-window toolbarview > .top-bar headerbar,
+window.nautilus-window toolbarview > .top-bar headerbar.flat,
+window.nautilus-window headerbar {
+  min-height: 32px;
+  padding: 2px 6px;
+}
+
+window.nautilus-window headerbar button,
+window.nautilus-window headerbar menubutton > button,
+window.nautilus-window headerbar togglebutton,
+window.nautilus-window headerbar splitbutton > button {
+  min-height: 24px;
+  min-width: 24px;
+  padding: 0 6px;
+  margin: 0;
+}
+
+window.nautilus-window headerbar .title {
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+window.nautilus-window windowcontrols > button {
+  min-height: 20px;
+  min-width: 20px;
+  padding: 2px;
 }
 
 window.nautilus-window .nautilus-pathbar {
-  min-height: 34px;
+  min-height: 24px;
 }
 
 window.nautilus-window .nautilus-path-button {
+  margin: 0 2px;
+  min-height: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+window.nautilus-window .nautilus-query-editor > menubutton > button {
   margin-top: 0;
   margin-bottom: 0;
-  min-height: 28px;
+  min-height: 20px;
 }
 
 /* Nautilus 50 "small" zoom is still 48px. Cap the custom icon widget. */
