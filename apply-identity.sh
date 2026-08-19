@@ -428,16 +428,40 @@ EOF
   --accent-color: #FFFFFF;
 }
 
-window.nautilus-window,
-.nautilus-window,
-.nautilus-window label,
-.nautilus-window .sidebar,
+/* Compact file labels only. Do not set font-size on the window or
+ * headerbar — libadwaita sizes the sidebar header (Files + menu) and
+ * the content header (pathbar) from the same em-based min-height, so a
+ * window-wide 12px scale makes those two bars miss each other. */
 .nautilus-window .sidebar label,
-.nautilus-window .icon-ui-labels-box,
 .nautilus-window .icon-ui-labels-box label,
-.nautilus-window .column-name-labels-box,
-.nautilus-window .column-name-labels-box label {
+.nautilus-window .column-name-labels-box label,
+.nautilus-grid-view label,
+.nautilus-list-view label {
   font-size: 12px;
+}
+
+/* Keep the two Nautilus 50 AdwHeaderBars on one row. */
+window.nautilus-window headerbar {
+  min-height: 48px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+window.nautilus-window headerbar button {
+  min-height: 34px;
+  min-width: 34px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+window.nautilus-window .nautilus-pathbar {
+  min-height: 34px;
+}
+
+window.nautilus-window .nautilus-path-button {
+  margin-top: 0;
+  margin-bottom: 0;
+  min-height: 28px;
 }
 
 /* Nautilus 50 "small" zoom is still 48px. Cap the custom icon widget. */
