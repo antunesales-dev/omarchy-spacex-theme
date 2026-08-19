@@ -438,55 +438,100 @@ EOF
   font-size: 12px;
 }
 
-/* Shrink the two AdwHeaderBars together. libadwaita defaults them to
- * 46–47px; beat toolbarview > .top-bar headerbar on specificity. */
-window.nautilus-window toolbarview > .top-bar {
-  min-height: 0;
-}
-
+/* OverlaySplitView will not sync the sidebar title bar with the
+ * pathbar. libadwaita puts the real padding on
+ * headerbar > windowhandle > box (6px / 7px) — that is what
+ * shoved the pathbar off the sidebar cluster. */
+window.nautilus-window toolbarview > .top-bar,
 window.nautilus-window toolbarview > .top-bar headerbar,
 window.nautilus-window toolbarview > .top-bar headerbar.flat,
 window.nautilus-window headerbar {
-  min-height: 32px;
-  padding: 2px 6px;
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 0 !important;
+}
+
+window.nautilus-window headerbar windowhandle box,
+.nautilus-window headerbar windowhandle box,
+window.nautilus-window toolbarview .top-bar headerbar windowhandle box {
+  min-height: 34px !important;
+  max-height: 34px !important;
+  padding: 3px 6px !important;
 }
 
 window.nautilus-window headerbar button,
-window.nautilus-window headerbar menubutton > button,
+window.nautilus-window headerbar button.image-button,
+window.nautilus-window headerbar button.toggle,
 window.nautilus-window headerbar togglebutton,
-window.nautilus-window headerbar splitbutton > button {
-  min-height: 24px;
-  min-width: 24px;
-  padding: 0 6px;
-  margin: 0;
+window.nautilus-window headerbar menubutton,
+window.nautilus-window headerbar menubutton > button,
+window.nautilus-window headerbar menubutton.image-button > button,
+window.nautilus-window headerbar splitbutton,
+window.nautilus-window headerbar splitbutton > button,
+window.nautilus-window headerbar splitbutton.image-button > button,
+window.nautilus-window headerbar splitbutton > menubutton,
+window.nautilus-window headerbar splitbutton > menubutton > button,
+window.nautilus-window headerbar windowcontrols > button,
+window.nautilus-window windowcontrols > button,
+window.nautilus-window headerbar windowtitle,
+window.nautilus-window headerbar windowtitle > .title,
+window.nautilus-window headerbar .title {
+  min-height: 28px !important;
+  max-height: 28px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+window.nautilus-window headerbar button,
+window.nautilus-window headerbar button.image-button,
+window.nautilus-window headerbar togglebutton,
+window.nautilus-window headerbar menubutton > button,
+window.nautilus-window headerbar splitbutton > button,
+window.nautilus-window headerbar splitbutton > menubutton > button,
+window.nautilus-window windowcontrols > button {
+  min-width: 28px !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+}
+
+window.nautilus-window headerbar splitbutton > separator {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+window.nautilus-window headerbar image {
+  -gtk-icon-size: 16px;
 }
 
 window.nautilus-window headerbar .title {
-  padding-left: 6px;
-  padding-right: 6px;
-}
-
-window.nautilus-window windowcontrols > button {
-  min-height: 20px;
-  min-width: 20px;
-  padding: 2px;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  font-size: 13px;
 }
 
 window.nautilus-window .nautilus-pathbar {
-  min-height: 24px;
+  min-height: 28px !important;
+  max-height: 28px !important;
 }
 
 window.nautilus-window .nautilus-path-button {
-  margin: 0 2px;
-  min-height: 20px;
-  padding-top: 0;
-  padding-bottom: 0;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: 2px;
+  margin-right: 2px;
+  min-height: 24px !important;
+  max-height: 24px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 window.nautilus-window .nautilus-query-editor > menubutton > button {
-  margin-top: 0;
-  margin-bottom: 0;
-  min-height: 20px;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  min-height: 24px !important;
+  max-height: 24px !important;
 }
 
 /* Nautilus 50 "small" zoom is still 48px. Cap the custom icon widget. */
