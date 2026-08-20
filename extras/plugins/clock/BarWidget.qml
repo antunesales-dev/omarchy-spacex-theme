@@ -143,6 +143,7 @@ BarWidget {
     id: button
     anchors.fill: parent
     bar: root.bar
+    fontFamily: "D-DIN"
     text: root.vertical ? "" : root.displayText
     labelVisible: !root.vertical
     hasVisualContent: root.vertical ? root.verticalLines.length > 0 : text !== ""

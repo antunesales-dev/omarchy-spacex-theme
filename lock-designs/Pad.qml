@@ -7,32 +7,18 @@ DesignBase {
   id: lock
   inputItem: field.input
 
-  readonly property int barH: Math.round(height * 0.13)
-  readonly property int pad: 36
-  readonly property color steel: "#C4C8CC"
-  readonly property color ink: "#F5F5F5"
-  readonly property color dim: "#8A8A8A"
+  readonly property int barH: Math.round(height * 0.10)
+  readonly property int pad: 48
+  readonly property color steel: "#FFFFFF"
+  readonly property color ink: "#FFFFFF"
+  readonly property color dim: "#FFFFFF"
 
   Wallpaper {
     anchors.fill: parent
     lock: lock
     blur: 0.0
-    dim: 0.08
+    dim: 0.0
     vignette: false
-  }
-
-  Canvas {
-    anchors.fill: parent
-    opacity: 0.05
-    onPaint: {
-      var ctx = getContext("2d")
-      ctx.clearRect(0, 0, width, height)
-      ctx.fillStyle = "#000000"
-      for (var y = 0; y < height; y += 4)
-        ctx.fillRect(0, y, width, 1)
-    }
-    onWidthChanged: requestPaint()
-    onHeightChanged: requestPaint()
   }
 
   MouseArea {
@@ -111,7 +97,7 @@ DesignBase {
     width: parent.width
     height: 1
     color: lock.steel
-    opacity: 0.4
+    opacity: 1
   }
 
   Rectangle {
@@ -126,7 +112,7 @@ DesignBase {
       width: parent.width
       height: 1
       color: lock.steel
-      opacity: 0.4
+      opacity: 1
     }
 
     Row {
@@ -175,7 +161,7 @@ DesignBase {
         radius: 0
         outlineThickness: 1
         showLockGlyph: false
-        color: "#0A0A0A"
+        color: "#000000"
         placeholder: "PASSWORD"
       }
     }

@@ -33,7 +33,7 @@ backgrounds/4-2021-sn20-tiles.jpg
   Author: Lars Plougmann
   License: CC BY-SA 2.0
   https://commons.wikimedia.org/wiki/File:Starship_SN20_getting_a_tile_inspection.jpg
-  Changes: converted to grayscale, cropped to 16:9.
+  Changes: cropped to 16:9.
 
 backgrounds/5-2024-ift5-catch.jpg
   Super Heavy Booster 12 approaching the chopsticks, Starship Flight 5,
@@ -41,10 +41,34 @@ backgrounds/5-2024-ift5-catch.jpg
   Author: Steve Jurvetson
   License: CC BY 2.0
   https://commons.wikimedia.org/wiki/File:Starship_Booster_Return_on_Final_Approach_(54063904149).jpg
-  Changes: converted to grayscale, cropped to 16:9.
+  Changes: cropped to 16:9.
 
-preview.png is derived from the Flight 5 catch photograph (Steve Jurvetson,
-CC BY 2.0) with the same grayscale and crop treatment.
+backgrounds/6-2020-crew1-earth.jpg
+  Earth from a Crew Dragon window, Expedition 64 / Crew-1.
+  Author: NASA Johnson Space Center (ISS064-E-5636)
+  License: Public domain (NASA)
+  https://commons.wikimedia.org/wiki/File:SpaceX_Crew_1_capsule_window_view.jpg
+
+backgrounds/7-2015-crs6-night.jpg
+  Falcon 9 launching CRS-6 Dragon, 14 April 2015.
+  Author: SpaceX (Official SpaceX Photos / Flickr)
+  License: CC0 1.0
+  https://commons.wikimedia.org/wiki/File:Launch_of_Falcon_9_carrying_CRS-6_Dragon_(17170624642).jpg
+
+backgrounds/8-2021-crew3-39a.jpg
+  Crew-3 Falcon 9 and Dragon vertical at LC-39A, 27 October 2021.
+  Author: SpaceX
+  License: CC0 1.0
+  https://commons.wikimedia.org/wiki/File:SpaceX_Crew-3_Falcon_9_Vertical_at_LC_39A_(KSC-20211027-PH-SPX02_0001).jpg
+
+backgrounds/9-2021-dragon-iss.jpg
+  The International Space Station pictured from Crew Dragon, 2021.
+  Author: NASA (JSC2021-E-064211)
+  License: Public domain (NASA)
+  https://commons.wikimedia.org/wiki/File:The_station_pictured_from_the_SpaceX_Crew_Dragon_5.jpg
+
+preview.png and preview-unlock.png are derived from the Flight 5 catch
+photograph (Steve Jurvetson, CC BY 2.0), cropped to 16:9.
 
 Fonts
 -----

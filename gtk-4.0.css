@@ -1,0 +1,646 @@
+/* omarchy-spacex */
+/* Adwaita-dark is grey. SpaceX chrome is only black and white. */
+@define-color accent_bg_color #FFFFFF;
+@define-color accent_fg_color #000000;
+@define-color accent_color #FFFFFF;
+@define-color theme_selected_bg_color #FFFFFF;
+@define-color theme_selected_fg_color #000000;
+@define-color destructive_bg_color #FFFFFF;
+@define-color destructive_fg_color #000000;
+@define-color destructive_color #FFFFFF;
+@define-color success_bg_color #FFFFFF;
+@define-color success_fg_color #000000;
+@define-color success_color #FFFFFF;
+@define-color warning_bg_color #FFFFFF;
+@define-color warning_fg_color #000000;
+@define-color warning_color #FFFFFF;
+@define-color error_bg_color #FFFFFF;
+@define-color error_fg_color #000000;
+@define-color error_color #FFFFFF;
+@define-color window_bg_color #000000;
+@define-color window_fg_color #FFFFFF;
+@define-color view_bg_color #000000;
+@define-color view_fg_color #FFFFFF;
+@define-color headerbar_bg_color #000000;
+@define-color headerbar_fg_color #FFFFFF;
+@define-color headerbar_border_color #FFFFFF;
+@define-color headerbar_backdrop_color #000000;
+@define-color headerbar_shade_color #000000;
+@define-color headerbar_darker_shade_color #000000;
+@define-color sidebar_bg_color #000000;
+@define-color sidebar_fg_color #FFFFFF;
+@define-color sidebar_backdrop_color #000000;
+@define-color sidebar_shade_color #000000;
+@define-color sidebar_border_color #FFFFFF;
+@define-color secondary_sidebar_bg_color #000000;
+@define-color secondary_sidebar_fg_color #FFFFFF;
+@define-color secondary_sidebar_backdrop_color #000000;
+@define-color secondary_sidebar_shade_color #000000;
+@define-color secondary_sidebar_border_color #FFFFFF;
+@define-color card_bg_color #000000;
+@define-color card_fg_color #FFFFFF;
+@define-color card_shade_color #000000;
+@define-color thumbnail_bg_color #000000;
+@define-color thumbnail_fg_color #FFFFFF;
+@define-color dialog_bg_color #000000;
+@define-color dialog_fg_color #FFFFFF;
+@define-color popover_bg_color #000000;
+@define-color popover_fg_color #FFFFFF;
+@define-color popover_shade_color #000000;
+@define-color shade_color #000000;
+@define-color scrollbar_outline_color #000000;
+
+:root {
+  accent-color: #FFFFFF;
+  --accent-bg-color: #FFFFFF;
+  --accent-fg-color: #000000;
+  --accent-color: #FFFFFF;
+  --window-bg-color: #000000;
+  --window-fg-color: #FFFFFF;
+  --view-bg-color: #000000;
+  --view-fg-color: #FFFFFF;
+  --headerbar-bg-color: #000000;
+  --headerbar-fg-color: #FFFFFF;
+  --headerbar-border-color: #FFFFFF;
+  --headerbar-backdrop-color: #000000;
+  --headerbar-shade-color: #000000;
+  --sidebar-bg-color: #000000;
+  --sidebar-fg-color: #FFFFFF;
+  --sidebar-backdrop-color: #000000;
+  --sidebar-border-color: #FFFFFF;
+  --sidebar-shade-color: #000000;
+  --card-bg-color: #000000;
+  --card-fg-color: #FFFFFF;
+  --popover-bg-color: #000000;
+  --popover-fg-color: #FFFFFF;
+  --dialog-bg-color: #000000;
+  --dialog-fg-color: #FFFFFF;
+  --destructive-bg-color: #FFFFFF;
+  --destructive-fg-color: #000000;
+  --success-color: #FFFFFF;
+  --warning-color: #FFFFFF;
+  --error-color: #FFFFFF;
+  --border-color: #FFFFFF;
+  --shade-color: #000000;
+  --osd-bg-color: #000000;
+  --osd-fg-color: #FFFFFF;
+}
+
+window, .background, .osd {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+headerbar,
+.top-bar,
+.bottom-bar,
+toolbarview > .top-bar,
+toolbarview > .bottom-bar {
+  background-color: #000000;
+  color: #FFFFFF;
+  background-image: none;
+  box-shadow: none;
+}
+
+.sidebar,
+.navigation-sidebar,
+filechooser,
+filechooser .sidebar,
+filechooser .navigation-sidebar,
+window.nautilus-file-chooser,
+window.nautilus-file-chooser .sidebar,
+window.nautilus-file-chooser .content-pane,
+window.nautilus-file-chooser .view,
+window.nautilus-file-chooser toolbarview,
+window.nautilus-file-chooser overlay,
+window.nautilus-file-chooser scrolledwindow,
+window.nautilus-file-chooser viewport {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+filechooser row:selected,
+filechooser .sidebar row:selected,
+filechooser .navigation-sidebar row:selected,
+window.nautilus-file-chooser row:selected,
+window.nautilus-file-chooser .sidebar row:selected,
+window.nautilus-file-chooser listview > row:selected,
+window.nautilus-file-chooser columnview row:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+  outline: none;
+}
+
+filechooser row:selected label,
+filechooser .sidebar row:selected label,
+window.nautilus-file-chooser row:selected label {
+  color: #000000;
+  background-color: transparent;
+}
+
+popover, popover > contents, menu, .menu, dialog, .dialog {
+  background-color: #000000;
+  color: #FFFFFF;
+  border-radius: 0;
+}
+
+/* Dropdown / menu highlight: white field, black type. */
+popover listview > row:hover,
+popover listview > row:selected,
+popover listview > row:selected:hover,
+popover contents listview > row:hover,
+popover contents listview > row:selected,
+popover.menu modelbutton:hover,
+popover.menu modelbutton:selected,
+popover.menu modelbutton:checked,
+popover modelbutton:hover,
+popover modelbutton:selected,
+menu menuitem:hover,
+menu menuitem:selected,
+combobox popover row:hover,
+combobox popover row:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+  outline: none;
+  box-shadow: none;
+}
+
+popover listview > row:hover label,
+popover listview > row:selected label,
+popover.menu modelbutton:hover label,
+popover.menu modelbutton:selected label,
+popover modelbutton:hover label,
+menu menuitem:hover label {
+  color: #000000;
+  background-color: transparent;
+}
+
+.dim-label, .caption, .subtitle, label.dim {
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+* {
+  border-radius: 0;
+  background-image: none;
+  box-shadow: none;
+  accent-color: #FFFFFF;
+  --accent-bg-color: #FFFFFF;
+  --accent-color: #FFFFFF;
+  --accent-fg-color: #000000;
+}
+
+/* Adwaita paints buttons with alpha(currentColor) — that is grey. */
+button {
+  background-color: #000000;
+  color: #FFFFFF;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+button:hover,
+button:active,
+button:checked,
+button:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+button:hover label,
+button:hover image,
+button:active label,
+button:active image,
+button:checked label,
+button:checked image,
+button:selected label,
+button:selected image,
+window.nautilus-window button:hover label,
+window.nautilus-window button:hover image,
+window.nautilus-window button:checked label,
+window.nautilus-window button:checked image,
+window.nautilus-window button:selected label,
+window.nautilus-window button:selected image,
+window.nautilus-window button:active label,
+window.nautilus-window button:active image {
+  color: #000000;
+}
+
+button.flat,
+button.image-button,
+button.circular,
+.nautilus-path-button {
+  background-color: transparent;
+  color: #FFFFFF;
+  box-shadow: none;
+  border: none;
+}
+
+button.flat:hover,
+button.image-button:hover,
+button.circular:hover {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+button.flat:hover label,
+button.flat:hover image,
+button.image-button:hover label,
+button.image-button:hover image,
+button.circular:hover label,
+button.circular:hover image {
+  color: #000000;
+}
+
+/* Close must not size the header. Match the search/view 22px glyphs. */
+window.nautilus-window windowcontrols,
+window.nautilus-window headerbar windowcontrols {
+  min-height: 0;
+  max-height: 22px;
+  margin: 0;
+  padding: 0;
+}
+
+window.nautilus-window windowcontrols button,
+window.nautilus-window windowcontrols button.close,
+window.nautilus-window windowcontrols button.minimize,
+window.nautilus-window windowcontrols button.maximize,
+window.nautilus-window headerbar button.close,
+window.nautilus-window button.close {
+  background-color: transparent;
+  background-image: none;
+  color: #FFFFFF;
+  border: none;
+  box-shadow: none;
+  min-width: 22px;
+  min-height: 0;
+  max-height: 22px;
+  padding: 0;
+  margin: 0;
+}
+
+window.nautilus-window windowcontrols button:hover,
+window.nautilus-window windowcontrols button:active,
+window.nautilus-window windowcontrols button.close:hover,
+window.nautilus-window headerbar button.close:hover,
+window.nautilus-window button.close:hover {
+  background-color: transparent;
+  color: #FFFFFF;
+  box-shadow: none;
+  border: none;
+}
+
+window.nautilus-window windowcontrols button image,
+window.nautilus-window windowcontrols button.close image,
+window.nautilus-window button.close image {
+  color: #FFFFFF;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+}
+
+headerbar button.image-button:hover,
+headerbar button.flat:hover,
+headerbar button.circular:hover,
+headerbar button.image-button:checked,
+headerbar button.flat:checked,
+headerbar button.popup:checked,
+headerbar button.toggle:checked {
+  background-color: transparent;
+  background-image: none;
+  color: #FFFFFF;
+  border: none;
+  box-shadow: none;
+}
+
+button.suggested-action,
+button.default,
+.suggested-action {
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+button.suggested-action:hover,
+button.default:hover,
+.suggested-action:hover {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+entry, searchbar, textview,
+entry:hover, entry:focus, entry:focus-within,
+searchbar:hover, searchbar:focus, searchbar:focus-within {
+  background-color: #000000;
+  color: #FFFFFF;
+  caret-color: #FFFFFF;
+  border-radius: 0;
+  box-shadow: none;
+  background-image: none;
+}
+
+scrollbar, scrollbar trough {
+  background-color: #000000;
+}
+
+scrollbar slider {
+  background-color: #FFFFFF;
+  border-radius: 0;
+}
+
+tooltip {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+/* View labels only — never the headerbars. */
+.nautilus-window .sidebar label,
+.nautilus-window .icon-ui-labels-box label,
+.nautilus-window .column-name-labels-box label,
+.nautilus-grid-view label,
+.nautilus-list-view label {
+  font-size: 12px;
+}
+
+.nautilus-window .sidebar {
+  background-color: #000000;
+}
+
+window.nautilus-window {
+  background-color: #000000;
+}
+
+/* Empty-folder canvas is Adwaita grey unless these surfaces are forced. */
+window.nautilus-window .content-pane,
+window.nautilus-window .content-pane > toolbarview,
+window.nautilus-window toolbarview,
+window.nautilus-window overlay,
+window.nautilus-window scrolledwindow,
+window.nautilus-window viewport,
+window.nautilus-window .view,
+window.nautilus-window .nautilus-grid-view,
+window.nautilus-window .nautilus-list-view,
+window.nautilus-window statuspage,
+window.nautilus-window .statuspage {
+  background-color: #000000;
+  background-image: none;
+}
+
+window.nautilus-window statuspage label,
+window.nautilus-window .statuspage label {
+  color: #FFFFFF;
+}
+
+/* Even the two headerbars without touching padding.
+ * Stock libadwaita padding is px (6px 7px 7px 7px on
+ * headerbar > windowhandle > box), not rem.
+ * Cap height so the path field cannot grow the right bar. */
+window.nautilus-window .sidebar-pane toolbarview > .top-bar,
+window.nautilus-window .content-pane toolbarview > .top-bar,
+window.nautilus-window headerbar,
+window.nautilus-window toolbarview > .top-bar headerbar {
+  min-height: 36px;
+  max-height: 36px;
+}
+
+window.nautilus-window .nautilus-path-button {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Path highlight must not grow the header. Adwaita's focus ring
+ * (outline-offset / extra border) is what made the two bars mismatch. */
+window.nautilus-window headerbar entry,
+window.nautilus-window headerbar entry:hover,
+window.nautilus-window headerbar entry:focus,
+window.nautilus-window headerbar entry:focus-within,
+window.nautilus-window headerbar entry:focus-visible,
+window.nautilus-window .top-bar entry,
+window.nautilus-window .top-bar entry:hover,
+window.nautilus-window .top-bar entry:focus,
+window.nautilus-window .top-bar entry:focus-within,
+window.nautilus-window searchbar,
+window.nautilus-window searchbar entry,
+window.nautilus-window searchbar entry:hover,
+window.nautilus-window searchbar entry:focus,
+window.nautilus-window searchbar entry:focus-within,
+window.nautilus-window .nautilus-path-bar,
+window.nautilus-window .nautilus-path-bar:focus,
+window.nautilus-window .nautilus-path-bar:focus-within,
+window.nautilus-window .nautilus-path-button,
+window.nautilus-window .nautilus-path-button:hover,
+window.nautilus-window .nautilus-path-button:checked,
+window.nautilus-window .nautilus-path-button:selected,
+window.nautilus-window .nautilus-path-button:focus,
+window.nautilus-window .nautilus-path-button:focus-visible {
+  outline: none;
+  outline-width: 0;
+  outline-offset: 0;
+  box-shadow: none;
+  border: none;
+  min-height: 18px;
+  max-height: 18px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 12px;
+  background-color: transparent;
+  background-image: none;
+  color: #FFFFFF;
+  caret-color: #FFFFFF;
+  background-clip: padding-box;
+}
+
+window.nautilus-window .nautilus-path-button label,
+window.nautilus-window .nautilus-path-button:hover label,
+window.nautilus-window .nautilus-path-button:checked label,
+window.nautilus-window .nautilus-path-button:selected label,
+window.nautilus-window .nautilus-path-button:hover image,
+window.nautilus-window button.close:hover image,
+window.nautilus-window windowcontrols button:hover image,
+window.nautilus-window headerbar entry,
+window.nautilus-window headerbar entry > text,
+window.nautilus-window searchbar entry,
+window.nautilus-window searchbar entry > text {
+  color: #FFFFFF;
+  background-color: transparent;
+}
+
+window.nautilus-window headerbar *:focus,
+window.nautilus-window headerbar *:focus-within,
+window.nautilus-window headerbar *:focus-visible,
+window.nautilus-window .top-bar *:focus,
+window.nautilus-window .top-bar *:focus-within {
+  outline: none;
+  outline-width: 0;
+  outline-offset: 0;
+  box-shadow: none;
+}
+
+/* Vertical directory spacing only. Horizontal stays stock (18px / 6px). */
+.nautilus-grid-view gridview {
+  padding: 6px 18px;
+  border-spacing: 6px 2px;
+}
+
+.nautilus-grid-view gridview > child {
+  padding: 0;
+  border-radius: 0;
+}
+
+.nautilus-grid-view .nautilus-view-cell {
+  padding: 2px 6px;
+  border-radius: 0;
+}
+
+.nautilus-list-view columnview {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.nautilus-list-view columnview > listview {
+  padding-top: 6px;
+  padding-bottom: 8px;
+  border-spacing: 8px 2px;
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
+.nautilus-list-view columnview > listview > row {
+  margin-left: 24px;
+  margin-right: 24px;
+  border-radius: 0;
+}
+
+window.nautilus-window,
+window.nautilus-window * {
+  border-radius: 0;
+}
+
+window.nautilus-window label {
+  color: #FFFFFF;
+}
+
+window.nautilus-window .dim-label {
+  color: #FFFFFF;
+}
+
+window.nautilus-window button.suggested-action,
+window.nautilus-window button.default,
+window.nautilus-window .suggested-action {
+  background: #FFFFFF;
+  color: #000000;
+  border-radius: 0;
+}
+
+.nautilus-grid-view image,
+.nautilus-grid-view NautilusImage {
+  -gtk-icon-size: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+}
+
+.nautilus-list-view image,
+.nautilus-list-view NautilusImage {
+  -gtk-icon-size: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+}
+
+/* Selected / highlighted: white field, black type. Never blue.
+ * Do not use *:selected — that painted a slab on thumbnails and
+ * grew the path entry. Invert the label/row only, no extra outline. */
+@define-color blue_1 #FFFFFF;
+@define-color blue_2 #FFFFFF;
+@define-color blue_3 #FFFFFF;
+@define-color blue_4 #FFFFFF;
+@define-color blue_5 #FFFFFF;
+@define-color accent_blue #FFFFFF;
+@define-color theme_selected_bg_color #FFFFFF;
+@define-color theme_selected_fg_color #000000;
+
+.navigation-sidebar > row:selected,
+.navigation-sidebar row:selected,
+.sidebar row:selected,
+listview > row:selected,
+listview > row:selected:hover,
+.nautilus-list-view row:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+  outline: none;
+  box-shadow: none;
+}
+
+.navigation-sidebar row:selected label,
+.sidebar row:selected label,
+listview > row:selected label,
+.nautilus-list-view row:selected label {
+  color: #000000;
+  background-color: transparent;
+}
+
+.navigation-sidebar row:selected image,
+.sidebar row:selected image,
+listview > row:selected image,
+.nautilus-list-view row:selected image {
+  color: #000000;
+  background-color: transparent;
+}
+
+.nautilus-grid-view {
+  overflow: hidden;
+}
+
+/* Grid: the whole cell inverts. Label-only fill looked like a broken chip. */
+.nautilus-grid-view gridview > child:selected,
+.nautilus-grid-view gridview > child:selected:hover,
+.nautilus-grid-view > child:selected,
+.nautilus-grid-view .nautilus-view-cell:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+  outline: none;
+  outline-offset: 0;
+  box-shadow: none;
+  border: none;
+}
+
+.nautilus-grid-view gridview > child:selected label,
+.nautilus-grid-view gridview > child:selected .dim-label,
+.nautilus-grid-view .nautilus-view-cell:selected label,
+window.nautilus-window .nautilus-grid-view gridview > child:selected label {
+  background-color: transparent;
+  color: #000000;
+}
+
+.nautilus-grid-view gridview > child:selected image,
+.nautilus-grid-view gridview > child:selected NautilusImage {
+  background-color: transparent;
+  color: #000000;
+  outline: none;
+  box-shadow: none;
+}
+
+window.nautilus-window .bottom-bar,
+window.nautilus-window toolbarview > .bottom-bar,
+window.nautilus-window actionbar {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+window.nautilus-window .bottom-bar label,
+window.nautilus-window toolbarview > .bottom-bar label {
+  color: #FFFFFF;
+  background-color: transparent;
+}
+
+selection,
+textview > text selection,
+entry selection,
+label selection {
+  background-color: #FFFFFF;
+  color: #000000;
+}

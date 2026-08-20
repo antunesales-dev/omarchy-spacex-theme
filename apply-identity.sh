@@ -1,5 +1,5 @@
 #!/bin/bash
-# Apply SpaceX chrome that colors.toml cannot set: grayscale folders,
+# Apply SpaceX chrome that colors.toml cannot set: black/white folders,
 # D-DIN UI type, IBM Plex Mono in terminals, Adwaita cursor, clock/network
 # overlays, lock designs, and a launch cache.
 set -euo pipefail
@@ -22,7 +22,7 @@ install_fonts() {
 grayscale_png() {
   local src="$1" dest="$2"
   mkdir -p "$(dirname "$dest")"
-  magick "$src" -colorspace Gray "$dest"
+  magick "$src" -colorspace Gray -threshold 50% "$dest"
 }
 
 recolor_folder_svg() {
@@ -34,28 +34,28 @@ src, dest = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
 text = src.read_text(encoding="utf-8")
 # Adwaita folder blues -> stainless / charcoal
 repl = {
-    "#62a0ea": "#9a9a9a",
-    "#62A0EA": "#9a9a9a",
-    "#afd4ff": "#d0d0d0",
-    "#AFD4FF": "#d0d0d0",
-    "#438de6": "#7a7a7a",
-    "#438DE6": "#7a7a7a",
-    "#1c71d8": "#6a6a6a",
-    "#1C71D8": "#6a6a6a",
-    "#1a5fb4": "#5a5a5a",
-    "#1A5FB4": "#5a5a5a",
-    "#3584e4": "#8a8a8a",
-    "#3584E4": "#8a8a8a",
-    "#c0d5ea": "#c4c8cc",
-    "#C0D5EA": "#c4c8cc",
-    "#a4caee": "#b4b4b4",
-    "#A4CAEE": "#b4b4b4",
-    "#99c1f1": "#b0b0b0",
-    "#99C1F1": "#b0b0b0",
+    "#62a0ea": "#FFFFFF",
+    "#62A0EA": "#FFFFFF",
+    "#afd4ff": "#FFFFFF",
+    "#AFD4FF": "#FFFFFF",
+    "#438de6": "#FFFFFF",
+    "#438DE6": "#FFFFFF",
+    "#1c71d8": "#000000",
+    "#1C71D8": "#000000",
+    "#1a5fb4": "#000000",
+    "#1A5FB4": "#000000",
+    "#3584e4": "#FFFFFF",
+    "#3584E4": "#FFFFFF",
+    "#c0d5ea": "#FFFFFF",
+    "#C0D5EA": "#FFFFFF",
+    "#a4caee": "#FFFFFF",
+    "#A4CAEE": "#FFFFFF",
+    "#99c1f1": "#FFFFFF",
+    "#99C1F1": "#FFFFFF",
 }
 for old, new in repl.items():
     text = text.replace(old, new)
-text = re.sub(r'stop-color="#[0-9a-fA-F]{6}"', 'stop-color="#9a9a9a"', text)
+text = re.sub(r'stop-color="#[0-9a-fA-F]{6}"', 'stop-color="#FFFFFF"', text)
 dest.write_text(text, encoding="utf-8")
 PY
 }
@@ -152,7 +152,7 @@ install_icons() {
   cat >"$ICON_DIR/index.theme" <<'EOF'
 [Icon Theme]
 Name=SpaceX
-Comment=Yaru-dark with grayscale folders
+Comment=Yaru-dark with black and white folders
 Inherits=Yaru-dark,Yaru,Adwaita,hicolor
 Example=folder
 Directories=16x16/places,16x16@2x/places,24x24/places,24x24@2x/places,32x32/places,32x32@2x/places,48x48/places,48x48@2x/places,256x256/places,256x256@2x/places,scalable/places,scalable/status
@@ -231,6 +231,25 @@ MaxSize=512
 Type=Scalable
 EOF
 
+  # Black and white geometric folders overwrite Yaru/Adwaita blues.
+  local extra_places="$THEME_DIR/extras/icons/places"
+  if [[ -d $extra_places ]]; then
+    mkdir -p "$ICON_DIR/scalable/places"
+    cp -f "$extra_places"/*.svg "$ICON_DIR/scalable/places/" 2>/dev/null || true
+    local size svg base
+    for size in 16 24 32 48 256; do
+      mkdir -p "$ICON_DIR/${size}x${size}/places" "$ICON_DIR/${size}x${size}@2x/places"
+      for svg in "$extra_places"/*.svg; do
+        [[ -f $svg ]] || continue
+        base=$(basename "$svg" .svg)
+        if command -v magick >/dev/null; then
+          magick -background none "$svg" -resize "${size}x${size}" "$ICON_DIR/${size}x${size}/places/${base}.png" 2>/dev/null || true
+          magick -background none "$svg" -resize "$((size * 2))x$((size * 2))" "$ICON_DIR/${size}x${size}@2x/places/${base}.png" 2>/dev/null || true
+        fi
+      done
+    done
+  fi
+
   if command -v gtk4-update-icon-cache >/dev/null; then
     gtk4-update-icon-cache -f "$ICON_DIR" >/dev/null 2>&1 || true
   elif command -v gtk-update-icon-cache >/dev/null; then
@@ -279,10 +298,7 @@ write_fontconfig() {
     <test name="family" qual="any"><string>sans-serif</string></test>
     <edit name="family" mode="prepend_first" binding="strong"><string>D-DIN</string></edit>
   </match>
-  <match target="pattern">
-    <test name="family" qual="any"><string>monospace</string></test>
-    <edit name="family" mode="prepend_first" binding="strong"><string>IBM Plex Mono</string></edit>
-  </match>
+  <!-- Do not steal generic monospace — the Omarchy bar needs a nerd font. -->
 
   <match target="font">
     <test name="family" compare="contains"><string>D-DIN</string></test>
@@ -314,10 +330,7 @@ XML
     <test name="family" qual="any"><string>sans-serif</string></test>
     <edit name="family" mode="prepend_first" binding="strong"><string>D-DIN</string></edit>
   </match>
-  <match target="pattern">
-    <test name="family" qual="any"><string>monospace</string></test>
-    <edit name="family" mode="prepend_first" binding="strong"><string>IBM Plex Mono</string></edit>
-  </match>
+  <!-- Do not steal generic monospace — the Omarchy bar needs a nerd font. -->
   <!-- D-DIN stores styles as DIN-Bold / DIN-Italic, not Bold / Italic. -->
   <match target="pattern">
     <test name="family"><string>D-DIN</string></test>
@@ -386,104 +399,15 @@ EOF
 
   # GTK3 file chooser (xdg-desktop-portal-gtk) used by Chromium uploads.
   css="$HOME/.config/gtk-3.0/gtk.css"
-  cat >"$css" <<'EOF'
-/* omarchy-spacex */
-@define-color accent_bg_color #FFFFFF;
-@define-color accent_fg_color #000000;
-@define-color accent_color #FFFFFF;
-@define-color theme_selected_bg_color #FFFFFF;
-@define-color theme_selected_fg_color #000000;
-
-button.suggested-action,
-button.default,
-.suggested-action {
-  background-image: none;
-  background-color: #C4C8CC;
-  color: #000000;
-  border-color: #A7A9AC;
-}
-
-button.suggested-action:hover,
-button.default:hover,
-.suggested-action:hover {
-  background-image: none;
-  background-color: #E8E8E8;
-  color: #000000;
-}
-EOF
+  if [[ -f $THEME_DIR/gtk-3.0.css ]]; then
+    cp -f "$THEME_DIR/gtk-3.0.css" "$css"
+  fi
 
   # GTK4 / libadwaita (newer pickers and Settings).
   css="$HOME/.config/gtk-4.0/gtk.css"
-  cat >"$css" <<'EOF'
-/* omarchy-spacex */
-@define-color accent_bg_color #FFFFFF;
-@define-color accent_fg_color #000000;
-@define-color accent_color #FFFFFF;
-@define-color theme_selected_bg_color #FFFFFF;
-@define-color theme_selected_fg_color #000000;
-
-:root {
-  --accent-bg-color: #FFFFFF;
-  --accent-fg-color: #000000;
-  --accent-color: #FFFFFF;
-}
-
-window.nautilus-window,
-.nautilus-window,
-.nautilus-window label,
-.nautilus-window .sidebar,
-.nautilus-window .sidebar label,
-.nautilus-window .icon-ui-labels-box,
-.nautilus-window .icon-ui-labels-box label,
-.nautilus-window .column-name-labels-box,
-.nautilus-window .column-name-labels-box label {
-  font-size: 12px;
-}
-
-/* Nautilus 50 "small" zoom is still 48px. Cap the custom icon widget. */
-.nautilus-grid-view gridview > child {
-  padding: 2px 4px;
-}
-
-.nautilus-grid-view image,
-.nautilus-grid-view NautilusImage {
-  -gtk-icon-size: 32px;
-  min-width: 32px;
-  min-height: 32px;
-  max-width: 32px;
-  max-height: 32px;
-}
-
-.nautilus-list-view image,
-.nautilus-list-view NautilusImage {
-  -gtk-icon-size: 16px;
-  min-width: 16px;
-  min-height: 16px;
-  max-width: 16px;
-  max-height: 16px;
-}
-
-gridview > child:selected,
-gridview > child:selected:hover,
-.nautilus-grid-view > child:selected,
-listview > row:selected,
-.nautilus-list-view row:selected {
-  background-color: #FFFFFF;
-  color: #000000;
-  outline-color: #000000;
-}
-
-gridview > child:selected label,
-gridview > child:selected .dim-label,
-listview > row:selected label {
-  color: #000000;
-}
-
-gridview > child:selected image,
-.nautilus-grid-view > child:selected image {
-  color: #000000;
-}
-EOF
+  if [[ -f $THEME_DIR/gtk-4.0.css ]]; then
+    cp -f "$THEME_DIR/gtk-4.0.css" "$css"
+  fi
 }
 
 write_portal_env() {
@@ -493,15 +417,19 @@ write_portal_env() {
 GTK_ICON_THEME=SpaceX
 GTK_THEME=Adwaita:dark
 GTK_USE_PORTAL=1
+OMARCHY_MENU_FONT=D-DIN
 EOF
 
   mkdir -p "$HOME/.config/systemd/user/xdg-desktop-portal-gtk.service.d"
   cat >"$HOME/.config/systemd/user/xdg-desktop-portal-gtk.service.d/spacex.conf" <<'EOF'
 # omarchy-spacex
 [Service]
+Environment=HOME=%h
+Environment=XDG_CONFIG_HOME=%h/.config
+Environment=XDG_DATA_HOME=%h/.local/share
 Environment=GTK_THEME=Adwaita:dark
 Environment=GTK_ICON_THEME=SpaceX
-Environment=XDG_DATA_HOME=%h/.local/share
+Environment=GTK_APPLICATION_PREFER_DARK_THEME=1
 EOF
   systemctl --user daemon-reload >/dev/null 2>&1 || true
 }
@@ -594,16 +522,17 @@ overlay_plugin() {
 }
 
 apply_bar_spacex_widgets() {
-  local clock_id network_id menu_id
+  local clock_id network_id menu_id workspaces_id
   clock_id="$(plugin_user_id omarchy.clock)"
   network_id="$(plugin_user_id omarchy.network)"
   menu_id="$(plugin_user_id omarchy.menu)"
-  python3 - "$clock_id" "$network_id" "$menu_id" <<'PY'
+  workspaces_id="$(plugin_user_id omarchy.workspaces)"
+  python3 - "$clock_id" "$network_id" "$menu_id" "$workspaces_id" <<'PY'
 import json
 import pathlib
 import sys
 
-clock_id, network_id, menu_id = sys.argv[1], sys.argv[2], sys.argv[3]
+clock_id, network_id, menu_id, workspaces_id = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 path = pathlib.Path.home() / ".config/omarchy/shell.json"
 if not path.exists():
     raise SystemExit(0)
@@ -665,6 +594,7 @@ replace_or_insert(
     before_id="omarchy.audio",
 )
 replace_or_insert("left", "omarchy.menu", menu_id)
+replace_or_insert("left", "omarchy.workspaces", workspaces_id)
 
 anchor = bar.get("centerAnchor")
 if anchor in (None, "", "omarchy.clock"):
@@ -678,6 +608,7 @@ install_plugin_overlays() {
   overlay_plugin "$THEME_DIR/extras/plugins/clock" omarchy.clock
   overlay_plugin "$THEME_DIR/extras/plugins/network" omarchy.network
   overlay_plugin "$THEME_DIR/extras/plugins/menu" omarchy.menu
+  overlay_plugin "$THEME_DIR/extras/plugins/workspaces" omarchy.workspaces
   apply_bar_spacex_widgets
 }
 

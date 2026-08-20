@@ -7,12 +7,12 @@ DesignBase {
   id: lock
   inputItem: field.input
 
-  readonly property int barHeight: Math.round(height * 0.14)
-  readonly property int pad: 40
-  readonly property color steel: "#C4C8CC"
-  readonly property color ink: "#F2F2F2"
+  readonly property int barHeight: Math.round(height * 0.10)
+  readonly property int pad: 48
+  readonly property color steel: "#FFFFFF"
+  readonly property color ink: "#FFFFFF"
 
-  Wallpaper { anchors.fill: parent; lock: lock; blur: 0.0; dim: 0.05; vignette: false }
+  Wallpaper { anchors.fill: parent; lock: lock; blur: 0.0; dim: 0.0; vignette: false }
 
   MouseArea {
     anchors.fill: parent
@@ -45,7 +45,8 @@ DesignBase {
       color: lock.steel
       font.family: Style.font.family
       font.pixelSize: Style.font.subtitle
-      font.letterSpacing: 4
+      font.letterSpacing: 8
+      font.capitalization: Font.AllUppercase
     }
   }
 
@@ -77,7 +78,7 @@ DesignBase {
         radius: 0
         outlineThickness: 1
         showLockGlyph: false
-        color: "#0A0A0A"
+        color: "#000000"
         placeholder: "Password"
       }
     }

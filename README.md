@@ -1,6 +1,6 @@
 # SpaceX — Omarchy theme
 
-Unofficial black-and-white [Omarchy](https://omarchy.org/) theme. Canvas is black, type is white, the only metal is stainless. No accent hue.
+Unofficial black-and-white [Omarchy](https://omarchy.org/) theme. Canvas is black, type is white. No greys, no accent hue.
 
 Not affiliated with SpaceX or NASA.
 
@@ -13,7 +13,7 @@ omarchy theme install https://github.com/antunesales-dev/omarchy-spacex-theme.gi
 
 Or from the Omarchy menu: **Install → Theme**, paste the URL, then run `apply-identity.sh` once.
 
-That first run installs fonts, grayscale folders, GTK / portal chrome, the clock and network overlays, the Pad lock design, and a `theme-set` hook. After that, switching back to SpaceX re-applies everything.
+That first run installs fonts, black-and-white folders, GTK / portal chrome, the clock and network overlays, the Pad lock design, and a `theme-set` hook. After that, switching back to SpaceX re-applies everything.
 
 Update later with `omarchy theme update`.
 
@@ -22,12 +22,12 @@ Update later with `omarchy theme update`.
 | Role | Hex |
 | --- | --- |
 | Background | `#000000` |
-| Foreground | `#F5F5F5` |
-| Accent / stainless | `#C4C8CC` |
-| Muted | `#A0A0A0` |
-| Selection | `#2A2A2A` |
+| Foreground | `#FFFFFF` |
+| Accent | `#FFFFFF` |
+| Muted | `#FFFFFF` |
+| Selection | `#FFFFFF` on `#000000` |
 
-Syntax colors are grayscale steps. Folders use a grayscale **SpaceX** icon theme (Yaru-dark plus Adwaita folder SVGs, with Ubuntu orange and GNOME blue stripped). App icons stay inherited so brands stay recognizable.
+Chrome is only `#000000` and `#FFFFFF`. Folders use a black-and-white **SpaceX** icon theme (Yaru-dark plus geometric folder SVGs). App icons stay inherited so brands stay recognizable.
 
 ## Type
 
@@ -42,19 +42,23 @@ SpaceX’s public face is **D-DIN** (DIN 1451, SIL OFL). This theme ships the fu
 
 ## Backgrounds
 
-Real photographs, converted to black and white:
+Each photograph ships as a black-and-white print (default name) and a `-color` original. Chrome stays black and white; cycle either set with `omarchy theme bg next`. Getty Images were not used.
 
-1. **2015** — Falcon 9 first landing on LZ-1
+1. **2015** — Falcon 9 first stage at LZ-1
 2. **2018** — Falcon Heavy twin side-booster landing
 3. **2020** — Crew Dragon Demo-2 launch from LC-39A
 4. **2021** — Starship SN20 hexagonal heat tiles on 301 stainless
 5. **2024** — Super Heavy Booster 12 on approach to the chopsticks (Flight 5)
+6. **2020** — Earth from a Crew-1 Dragon window
+7. **2015** — Falcon 9 / CRS-6 leaving the pad
+8. **2021** — Crew-3 Falcon 9 and Dragon at LC-39A, moon in frame
+9. **2021** — ISS from Crew Dragon
 
-Cycle with `omarchy theme bg next`. Photo licenses and authors are in [NOTICE](NOTICE) and [CREDITS.md](CREDITS.md).
+Cycle with `omarchy theme bg next`. Licenses and authors are in [NOTICE](NOTICE) and [CREDITS.md](CREDITS.md).
 
 ## What apply-identity sets
 
-HUD chrome (`shell.toml`): slimmer black bar, 1px stainless hairlines, white-on-black selected rows in menus and the launcher, opaque notification cards, heavier scrim. Windows get 1px steel borders and tighter gaps (`hyprland.lua`).
+HUD chrome (`shell.toml`): slimmer black bar, 1px stainless hairlines, white-on-black selected rows in menus and the launcher, opaque notification cards, heavier scrim. Windows get 1px steel borders and **more void** (`hyprland.lua` gaps 8/20). Lock screens are letterbox over full-color photography.
 
 Files (Nautilus) uses 12px type, 32px icons, and white selection with black labels. The Chromium / portal file chooser gets the same SpaceX icon theme and stainless suggested buttons. Menu search categories (Apps, Files, …) use the same white/black as the row title. After changing the menu overlay, run `omarchy restart shell` — the menu stays loaded and will not pick up QML until the shell restarts.
 
@@ -86,8 +90,8 @@ Screensaver branding is a Starship ASCII that TTE animates. Preview with Super+E
 
 ```
 colors.toml              Omarchy semantic palette (source of truth)
-icons.theme              SpaceX (grayscale folders, inherits Yaru-dark)
-keyboard.rgb             stainless #c4c8cc
+icons.theme              SpaceX (black/white folders, inherits Yaru-dark)
+keyboard.rgb             #ffffff
 preview.png              theme-switcher / gallery card
 apply-identity.sh        fonts, icons, GTK, plugins, lock, hook
 fonts/                   D-DIN + IBM Plex Mono (OFL)

@@ -132,7 +132,7 @@ Panel {
   // Guarded so the widget renders before the bar is injected (the bar-widget
   // contract instantiates it bare).
   readonly property color contentForeground: bar ? bar.foreground : Color.foreground
-  readonly property string contentFontFamily: bar ? bar.fontFamily : Style.font.family
+  readonly property string contentFontFamily: "D-DIN"
 
   readonly property int cellWidth: Style.space(52)
   readonly property int cellHeight: Style.space(34)
@@ -351,7 +351,7 @@ Panel {
         contentHeight: calendarColumn.implicitHeight
         clip: true
         boundsBehavior: Flickable.StopAtBounds
-        interactive: contentHeight > height || contentWidth > width
+        interactive: (contentHeight > height || contentWidth > width) && !yearBlock.rocketHeld
 
         Column {
           id: calendarColumn
@@ -433,11 +433,17 @@ Panel {
               y: Style.space(6)
               anchors.horizontalCenter: parent.horizontalCenter
               width: gridColumn.width
-              height: Math.max(yearLabel.implicitHeight, Style.space(10))
+              height: root.editingLife ? Math.max(yearLabel.implicitHeight, Style.space(10)) : Style.space(48)
+              property bool rocketHeld: false
+              property real scrubFlown: 0
+              readonly property real visualFlown: (rocketHeld || flyBack.running) ? scrubFlown : yearTrack.flown
 
-              TapHandler {
-                enabled: !root.editingLife
-                onDoubleTapped: root.startEditingLife()
+              NumberAnimation {
+                id: flyBack
+                target: yearBlock
+                property: "scrubFlown"
+                duration: 900
+                easing.type: Easing.InOutCubic
               }
 
               Row {
@@ -449,7 +455,7 @@ Panel {
                 Text {
                   anchors.verticalCenter: parent.verticalCenter
                   text: "BORN"
-                  color: Qt.darker(root.contentForeground, 1.5)
+                  color: "#FFFFFF"
                   font.family: root.contentFontFamily
                   font.pixelSize: Style.font.bodySmall
                   font.letterSpacing: 1
@@ -472,7 +478,7 @@ Panel {
                   anchors.verticalCenterOffset: 0
                   leftPadding: Style.space(6)
                   text: "LIVE TO"
-                  color: Qt.darker(root.contentForeground, 1.5)
+                  color: "#FFFFFF"
                   font.family: root.contentFontFamily
                   font.pixelSize: Style.font.bodySmall
                   font.letterSpacing: 1
@@ -491,49 +497,130 @@ Panel {
                 }
               }
 
+              // Earth — year start. Moon — year end. Rocket rides the rail.
+              // Nerd-font glyphs (not Canvas): Qt Context2D has no ellipse().
               Text {
                 id: yearLabel
                 visible: !root.editingLife
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                text: root.today.getFullYear()
-                color: Qt.darker(root.contentForeground, 1.5)
-                font.family: root.contentFontFamily
-                font.pixelSize: Style.font.bodySmall
-                font.letterSpacing: 1
+                width: Style.space(22)
+                height: Style.space(22)
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: "\uF0AC"
+                color: "#FFFFFF"
+                font.family: Style.font.family
+                font.pixelSize: Style.space(18)
               }
 
               Text {
-                id: yearPercent
+                id: yearMoon
                 visible: !root.editingLife
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                text: root.yearDonePercent + "%"
-                color: root.contentForeground
-                font.family: root.contentFontFamily
-                font.pixelSize: Style.font.bodySmall
+                width: Style.space(22)
+                height: Style.space(22)
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                text: "\uF186"
+                color: "#FFFFFF"
+                font.family: Style.font.family
+                font.pixelSize: Style.space(18)
               }
 
               Rectangle {
                 id: yearTrack
                 visible: !root.editingLife
                 anchors.left: yearLabel.right
-                anchors.right: yearPercent.left
-                anchors.leftMargin: Style.space(12)
-                anchors.rightMargin: Style.space(12)
+                anchors.right: yearMoon.left
+                anchors.leftMargin: Style.space(10)
+                anchors.rightMargin: Style.space(10)
                 anchors.verticalCenter: parent.verticalCenter
-                height: Style.space(6)
-                radius: Style.cornerRadius > 0 ? height / 2 : 0
-                color: Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.12)
+                height: 1
+                color: "#FFFFFF"
 
-                Rectangle {
-                  width: Math.round(parent.width * root.yearDone)
-                  height: parent.height
-                  radius: parent.radius
-                  color: Style.selectedStateColor(root.contentForeground, Color.accent)
+                readonly property real flown: Math.max(0, width * root.yearDone)
+                readonly property int sparkleCount: Math.max(0, Math.floor(yearBlock.visualFlown / 11))
 
-                  Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
+                // Wake: stars behind the rocket, Earth → ship.
+                Repeater {
+                  model: yearTrack.sparkleCount
+                  Text {
+                    required property int index
+                    text: index % 4 === 0 ? "*" : (index % 2 === 0 ? "+" : "·")
+                    color: "#FFFFFF"
+                    font.family: root.contentFontFamily
+                    font.pixelSize: index % 4 === 0 ? 12 : (index % 2 === 0 ? 9 : 7)
+                    x: 4 + index * 11
+                    y: (index % 2 === 0 ? -11 : 4) - height / 2
+                  }
                 }
+
+                PanelToolTip {
+                  visible: yearHover.hovered && !yearBlock.rocketHeld
+                  text: root.today.getFullYear() + "  ·  " + root.yearDonePercent + "%"
+                  fontFamily: root.contentFontFamily
+                }
+              }
+
+              HoverHandler {
+                id: yearHover
+                enabled: !root.editingLife && !yearBlock.rocketHeld
+              }
+
+              Image {
+                id: yearRocket
+                visible: !root.editingLife
+                width: 70
+                height: 38
+                x: yearTrack.x + yearBlock.visualFlown - 66
+                anchors.verticalCenter: yearTrack.verticalCenter
+                z: 2
+                source: Qt.resolvedUrl("rocket.svg")
+                sourceSize.width: 210
+                sourceSize.height: 114
+                fillMode: Image.PreserveAspectFit
+                smooth: true
+                antialiasing: true
+              }
+
+              MouseArea {
+                id: rocketGrab
+                visible: !root.editingLife
+                enabled: !root.editingLife
+                anchors.fill: parent
+                z: 10
+                hoverEnabled: true
+                preventStealing: true
+                acceptedButtons: Qt.LeftButton
+                cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+                function scrubTo(mx) {
+                  yearBlock.scrubFlown = Math.max(0, Math.min(yearTrack.width, mx - yearTrack.x))
+                }
+                function launchHome() {
+                  flyBack.stop()
+                  flyBack.from = yearBlock.scrubFlown
+                  flyBack.to = yearTrack.flown
+                  flyBack.start()
+                  yearBlock.rocketHeld = false
+                }
+                onPressed: function(mouse) {
+                  mouse.accepted = true
+                  calendarScroll.cancelFlick()
+                  flyBack.stop()
+                  yearBlock.rocketHeld = true
+                  scrubTo(mouse.x)
+                }
+                onPositionChanged: function(mouse) {
+                  if (!pressed)
+                    return
+                  mouse.accepted = true
+                  scrubTo(mouse.x)
+                }
+                onReleased: launchHome()
+                onCanceled: launchHome()
+                onDoubleClicked: root.startEditingLife()
               }
             }
           }
@@ -557,7 +644,7 @@ Panel {
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 text: "LIFE"
-                color: Qt.darker(root.contentForeground, 1.5)
+                color: "#FFFFFF"
                 font.family: root.contentFontFamily
                 font.pixelSize: Style.font.bodySmall
                 font.letterSpacing: 1
@@ -581,7 +668,9 @@ Panel {
                 anchors.verticalCenter: parent.verticalCenter
                 height: Style.space(6)
                 radius: Style.cornerRadius > 0 ? height / 2 : 0
-                color: Qt.rgba(root.contentForeground.r, root.contentForeground.g, root.contentForeground.b, 0.12)
+                color: "#000000"
+                border.width: 1
+                border.color: "#FFFFFF"
 
                 Rectangle {
                   width: Math.round(parent.width * root.lifeDone)
@@ -648,16 +737,12 @@ Panel {
                   width: root.weekColumnWidth
                   height: Style.space(16)
                   radius: Style.cornerRadius
-                  color: weekStartMouse.containsMouse
-                    ? Style.hoverFillFor(root.contentForeground, Color.accent)
-                    : "transparent"
+                  color: weekStartMouse.containsMouse ? "#FFFFFF" : "transparent"
 
                   Text {
                     anchors.centerIn: parent
                     text: "W"
-                    color: weekStartMouse.containsMouse
-                      ? Style.hoverStateColor(root.contentForeground, Color.accent)
-                      : Qt.darker(root.contentForeground, 1.9)
+                    color: weekStartMouse.containsMouse ? "#000000" : "#FFFFFF"
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                     font.letterSpacing: 1
@@ -694,7 +779,7 @@ Panel {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     text: root.weekdayLabel(modelData)
-                    color: Qt.darker(root.contentForeground, 1.5)
+                    color: "#FFFFFF"
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                     font.letterSpacing: 1
@@ -716,7 +801,7 @@ Panel {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     text: modelData.week
-                    color: Qt.darker(root.contentForeground, 1.9)
+                    color: "#FFFFFF"
                     font.family: root.contentFontFamily
                     font.pixelSize: Style.font.caption
                   }
@@ -746,8 +831,8 @@ Panel {
                         color: selected
                           ? "#000000"
                           : (modelData.inMonth
-                            ? (modelData.weekend ? Qt.darker(root.contentForeground, 1.45) : root.contentForeground)
-                            : Qt.darker(root.contentForeground, 2.2))
+                            ? root.contentForeground
+                            : "#FFFFFF")
                         font.family: root.contentFontFamily
                         font.pixelSize: Style.font.body
                         font.bold: modelData.today || selected
@@ -761,7 +846,7 @@ Panel {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: 4
-                        color: selected ? "#000000" : "#C4C8CC"
+                        color: selected ? "#000000" : "#FFFFFF"
                       }
 
                       MouseArea {
@@ -783,7 +868,7 @@ Panel {
               width: Style.spacing.hairline
               height: gridColumn.height - headerRow.height - gridColumn.spacing
               color: root.contentForeground
-              opacity: 0.1
+              opacity: 1.0
             }
           }
 
@@ -812,13 +897,13 @@ Panel {
                 width: Style.space(130)
                 horizontalAlignment: Text.AlignHCenter
                 text: Qt.formatDate(root.viewDate, "MMMM yyyy").toUpperCase()
-                color: Qt.darker(root.contentForeground, 1.4)
+                color: "#FFFFFF"
                 font.family: root.contentFontFamily
                 font.pixelSize: Style.font.body
                 font.letterSpacing: 1
               }
 
-              PanelActionButton {
+              InvertButton {
                 // Pulled out by the button's own padding so the glyph, not
                 // its hit box, lines up with the "2026" on the year rail.
                 anchors.left: parent.left
@@ -831,7 +916,7 @@ Panel {
                 onClicked: root.moveMonth(-1)
               }
 
-              PanelActionButton {
+              InvertButton {
                 anchors.right: parent.right
                 anchors.rightMargin: -Style.space(8)
                 anchors.verticalCenter: parent.verticalCenter
@@ -865,7 +950,7 @@ Panel {
               text: root.launchesFailed && root.spacexLaunches.length === 0
                 ? "NO FLIGHT DATA  ·  API UNREACHABLE"
                 : "NO SPACEX FLIGHT THIS DAY"
-              color: Qt.darker(root.contentForeground, 1.5)
+              color: "#FFFFFF"
               font.family: root.contentFontFamily
               font.pixelSize: Style.font.caption
               font.letterSpacing: 1
@@ -893,7 +978,7 @@ Panel {
                   text: root.formatLaunchTime(modelData)
                     + (modelData.status ? "  ·  " + modelData.status : "")
                     + (modelData.pad ? "  ·  " + modelData.pad : "")
-                  color: "#C4C8CC"
+                  color: "#FFFFFF"
                   font.family: root.contentFontFamily
                   font.pixelSize: Style.font.caption
                   wrapMode: Text.WordWrap
@@ -906,7 +991,7 @@ Panel {
               anchors.horizontalCenter: parent.horizontalCenter
               topPadding: Style.space(6)
               text: "THIS MONTH  ·  FLOWN + UPCOMING"
-              color: Qt.darker(root.contentForeground, 1.5)
+              color: "#FFFFFF"
               font.family: root.contentFontFamily
               font.pixelSize: Style.font.caption
               font.letterSpacing: 1.4
@@ -933,7 +1018,7 @@ Panel {
                 Text {
                   width: parent.width - Style.space(160)
                   text: root.shortLaunchName(modelData)
-                  color: Qt.darker(root.contentForeground, 1.25)
+                  color: "#FFFFFF"
                   font.family: root.contentFontFamily
                   font.pixelSize: Style.font.caption
                   elide: Text.ElideRight
@@ -941,7 +1026,7 @@ Panel {
 
                 Text {
                   text: modelData.status
-                  color: "#C4C8CC"
+                  color: "#FFFFFF"
                   font.family: root.contentFontFamily
                   font.pixelSize: Style.font.caption
                   font.bold: true

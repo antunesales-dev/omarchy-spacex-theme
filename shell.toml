@@ -1,148 +1,149 @@
-# SpaceX HUD chrome. Replaces the generated shell.toml.
+# SpaceX.com chrome: black overlay, white type, photo is the page.
 
 [bar]
 background       = "#000000"
 background-alpha = 1.0
-text             = "#F5F5F5"
+text             = "#FFFFFF"
 active           = "#FFFFFF"
 scale-with-font  = true
-size-horizontal  = 24
-size-vertical    = 26
+size-horizontal  = 34
+size-vertical    = 36
 
 [hyprland]
-active-border            = "rgba(c4c8ccee) rgba(ffffffff)"
-active-border-foreground = "#C4C8CC"
+active-border            = "rgba(ffffffff)"
+active-border-foreground = "#FFFFFF"
 
 [controls]
-normal-color        = "#C4C8CC"
+normal-color        = "#FFFFFF"
 normal-fill-alpha   = 0.0
-normal-border       = "#C4C8CC"
-normal-border-width = 1
-normal-border-alpha = 0.35
+normal-border       = "#FFFFFF"
+normal-border-width = 0
+normal-border-alpha = 0.0
 
 hover-cursor-color        = "#FFFFFF"
-hover-cursor-fill-alpha   = 0.06
+hover-cursor-fill-alpha   = 0.0
 hover-cursor-border       = "#FFFFFF"
-hover-cursor-border-width = 1
-hover-cursor-border-alpha = 0.7
+hover-cursor-border-width = 0
+hover-cursor-border-alpha = 0.0
 
 focus-color        = "#FFFFFF"
-focus-fill-alpha   = 0.06
+focus-fill-alpha   = 1.0
 focus-border       = "#FFFFFF"
-focus-border-width = 1
-focus-border-alpha = 0.7
+focus-border-width = 0
+focus-border-alpha = 0.0
 
-selected-color        = "#000000"
+selected-color        = "#FFFFFF"
 selected-fill-alpha   = 1.0
 selected-border       = "#FFFFFF"
-selected-border-width = 1
-selected-border-alpha = 1.0
+selected-border-width = 0
+selected-border-alpha = 0.0
 
-pressed-fill-alpha   = 0.18
-selection-fill-alpha = 0.28
+pressed-fill-alpha   = 1.0
+selection-fill-alpha = 1.0
+selection-color      = "#FFFFFF"
 
 [spacing]
-scale = 0.92
+scale = 1.28
 scale-with-font = true
-control-height = 26
-popup-row-height = 26
-control-padding-x = 8
-control-padding-y = 4
-popup-padding = 10
-panel-padding = 12
-row-padding-x = 10
+control-height = 32
+popup-row-height = 36
+control-padding-x = 16
+control-padding-y = 8
+popup-padding = 22
+panel-padding = 24
+row-padding-x = 18
 
 [font]
-base-size = 12
+base-size = 13
 caption = 11
 body-small = 12
-body = 12
-subtitle = 12
-title = 13
-heading = 15
+body = 13
+subtitle = 13
+title = 14
+heading = 16
 
 [popups]
 background       = "#000000"
 background-alpha = 1.0
-text             = "#F5F5F5"
-border           = "#C4C8CC"
-border-alpha     = 0.85
+text             = "#FFFFFF"
+border           = "#FFFFFF"
+border-alpha     = 1.0
 border-width     = 1
 
 [tooltip]
 background       = "#000000"
 background-alpha = 1.0
-text             = "#C4C8CC"
-border           = "#C4C8CC"
-border-alpha     = 0.55
+text             = "#FFFFFF"
+border           = "#FFFFFF"
+border-alpha     = 1.0
 
 [notifications]
-background       = "#000000"
+background       = "#FFFFFF"
 background-alpha = 1.0
-text             = "#F5F5F5"
-border           = "#C4C8CC"
-border-alpha     = 0.85
+text             = "#000000"
+border           = "#000000"
+border-alpha     = 1.0
 border-width     = 1
-countdown        = "#C4C8CC"
+countdown        = "#000000"
 
 [launcher]
 background                = "#000000"
 background-alpha          = 1.0
 text                      = "#FFFFFF"
-border                    = "#C4C8CC"
-border-alpha              = 0.85
+border                    = "#FFFFFF"
+border-alpha              = 1.0
 scrim                     = "#000000"
-scrim-alpha               = 0.72
+scrim-alpha               = 0.0
 selected-background       = "#FFFFFF"
 selected-background-alpha = 1.0
 selected-text             = "#000000"
 selected-border           = "#FFFFFF"
-selected-border-alpha     = 1.0
+selected-border-alpha     = 0.0
 
 [menu]
 background                = "#000000"
 background-alpha          = 1.0
 text                      = "#FFFFFF"
-border                    = "#C4C8CC"
-border-alpha              = 0.85
+border                    = "#FFFFFF"
+border-alpha              = 1.0
 scrim                     = "#000000"
-scrim-alpha               = 0.72
+scrim-alpha               = 0.0
 selected-background       = "#FFFFFF"
 selected-background-alpha = 1.0
 selected-text             = "#000000"
 selected-border           = "#000000"
-selected-border-alpha     = 1.0
+selected-border-alpha     = 0.0
 
 [polkit]
 background       = "#000000"
 background-alpha = 1.0
-text             = "#F5F5F5"
-text-error       = "#D0D0D0"
-border           = "#C4C8CC"
+text             = "#FFFFFF"
+text-error       = "#FFFFFF"
+border           = "#FFFFFF"
 border-error     = "#FFFFFF"
 border-alpha     = 1.0
 scrim            = "#000000"
-scrim-alpha      = 0.72
-accent           = "#C4C8CC"
+scrim-alpha      = 1.0
+accent           = "#FFFFFF"
 
 [lock]
 background       = "#000000"
-background-alpha = 0.92
-text             = "#F5F5F5"
-placeholder      = "#6B6B6B"
-text-error       = "#D0D0D0"
-border           = "#5A5A5A"
-border-active    = "#C4C8CC"
+background-alpha = 0.0
+text             = "#FFFFFF"
+placeholder      = "#FFFFFF"
+text-error       = "#FFFFFF"
+border           = "#FFFFFF"
+border-active    = "#FFFFFF"
 border-error     = "#FFFFFF"
 border-alpha     = 1.0
-selection        = "#C4C8CC"
-selection-alpha  = 0.35
+selection        = "#FFFFFF"
+selection-alpha  = 1.0
 
 [image-picker]
 scrim                   = "#000000"
-scrim-alpha             = 0.72
-text                    = "#F5F5F5"
-selected-border         = "#C4C8CC"
+scrim-alpha             = 0.0
+text                    = "#FFFFFF"
+selected-border         = "#FFFFFF"
 selected-border-alpha   = 1.0
-unselected-border       = "#F5F5F5"
-unselected-border-alpha = 0.22
+unselected-border       = "#FFFFFF"
+unselected-border-alpha = 1.0

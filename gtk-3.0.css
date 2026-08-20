@@ -1,0 +1,252 @@
+/* omarchy-spacex */
+@define-color accent_bg_color #FFFFFF;
+@define-color accent_fg_color #000000;
+@define-color accent_color #FFFFFF;
+@define-color theme_selected_bg_color #FFFFFF;
+@define-color theme_selected_fg_color #000000;
+@define-color theme_bg_color #000000;
+@define-color theme_fg_color #FFFFFF;
+@define-color theme_base_color #000000;
+@define-color theme_text_color #FFFFFF;
+@define-color insensitive_bg_color #000000;
+@define-color insensitive_fg_color #FFFFFF;
+@define-color insensitive_base_color #000000;
+@define-color theme_unfocused_bg_color #000000;
+@define-color theme_unfocused_fg_color #FFFFFF;
+@define-color borders #FFFFFF;
+@define-color unfocused_borders #FFFFFF;
+@define-color window_bg_color #000000;
+@define-color window_fg_color #FFFFFF;
+@define-color view_bg_color #000000;
+@define-color view_fg_color #FFFFFF;
+@define-color headerbar_bg_color #000000;
+@define-color headerbar_fg_color #FFFFFF;
+@define-color popover_bg_color #000000;
+@define-color popover_fg_color #FFFFFF;
+
+* {
+  background-image: none;
+  box-shadow: none;
+}
+
+window, .background, .osd {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+headerbar, .titlebar {
+  background-image: none;
+  background-color: #000000;
+  color: #FFFFFF;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.dim-label {
+  color: #FFFFFF;
+  opacity: 1;
+}
+
+button {
+  background-image: none;
+  background-color: #000000;
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+button:hover,
+button:active,
+button:checked {
+  background-image: none;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-color: #FFFFFF;
+  border-radius: 0;
+}
+
+button:hover label,
+button:hover image,
+button:active label,
+button:checked label,
+button:checked image {
+  color: #000000;
+}
+
+button.close,
+.titlebar button,
+headerbar button.titlebutton,
+.titlebutton,
+decoration button {
+  background-image: none;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: none;
+  box-shadow: none;
+}
+
+button.close:hover,
+button.close:active,
+.titlebar button:hover,
+headerbar button.titlebutton:hover,
+.titlebutton:hover,
+decoration button:hover {
+  background-image: none;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: none;
+  box-shadow: inset 0 0 0 1px #FFFFFF;
+}
+
+button.suggested-action,
+button.default,
+.suggested-action {
+  background-image: none;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-color: #FFFFFF;
+  border-radius: 0;
+}
+
+button.suggested-action:hover,
+button.default:hover,
+.suggested-action:hover {
+  background-image: none;
+  background-color: #000000;
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+  border-radius: 0;
+}
+
+button, entry, headerbar, popover, menu, dialog, .dialog {
+  border-radius: 0;
+}
+
+menu menuitem:hover,
+menu menuitem:selected,
+.menu menuitem:hover,
+popover.menu modelbutton:hover,
+combobox window.popup decoration,
+combobox menu menuitem:hover {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+entry, searchbar {
+  background-color: #000000;
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+  border-radius: 0;
+}
+
+scrollbar slider {
+  background-color: #FFFFFF;
+  border-radius: 0;
+}
+
+* {
+  accent-color: #FFFFFF;
+}
+
+*:selected,
+*:selected:focus,
+*:selected:hover,
+*:selected:backdrop,
+.view:selected,
+.view:selected:focus,
+row:selected,
+iconview:selected,
+iconview.view:selected,
+treeview:selected,
+list:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+*:selected label,
+*:selected image,
+.view:selected label,
+.view:selected image {
+  color: #000000;
+}
+
+selection {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+/* xdg-desktop-portal-gtk file chooser (screensaver, uploads). */
+filechooser,
+filechooserdialog,
+dialog,
+dialog.background,
+.filechooser {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+filechooser headerbar,
+filechooserdialog headerbar,
+dialog headerbar {
+  background-color: #000000;
+  color: #FFFFFF;
+  background-image: none;
+}
+
+filechooser .sidebar,
+filechooser placessidebar,
+placessidebar,
+.sidebar,
+filechooser stack,
+filechooser paned,
+filechooser .view,
+filechooser treeview,
+filechooser treeview.view,
+filechooser iconview,
+filechooser list,
+filechooser viewport,
+filechooser scrolledwindow {
+  background-color: #000000;
+  color: #FFFFFF;
+  background-image: none;
+}
+
+filechooser .sidebar label,
+placessidebar label,
+filechooser treeview,
+filechooser .view {
+  color: #FFFFFF;
+}
+
+filechooser .sidebar row:selected,
+filechooser .sidebar row:selected:hover,
+filechooser .sidebar row:selected:focus,
+placessidebar row:selected,
+placessidebar .sidebar-row:selected,
+placessidebar row:selected label,
+.sidebar row:selected,
+.sidebar-row:selected,
+filechooser treeview:selected,
+filechooser treeview.view:selected,
+filechooser .view:selected,
+filechooser list row:selected {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+
+filechooser .sidebar row:selected label,
+filechooser .sidebar row:selected image,
+placessidebar row:selected label,
+placessidebar row:selected image,
+filechooser treeview:selected,
+filechooser .view:selected {
+  color: #000000;
+}
+
+filechooser button.suggested-action,
+filechooserdialog button.suggested-action {
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 0;
+}

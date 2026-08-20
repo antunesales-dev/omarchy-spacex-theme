@@ -43,7 +43,7 @@ Item {
 
   function ping() { return "ok" }
 
-  property string fontFamily: Style.font.menuFamily
+  property string fontFamily: "D-DIN"
   // JSONC menu definitions. The shell parses both at startup and merges
   // the user file on top of the defaults, so the keybind → IPC → visible
   // path doesn't have to shell out to bash + jq on every open.
@@ -95,17 +95,17 @@ Item {
   property var selectedBorderSpec: Border.surfaceSpec("menu", "selected-border", selectedBorder, 0)
   readonly property real rowReservedBorderLeft: Border.left(selectedBorderSpec)
   readonly property real rowReservedBorderRight: Border.right(selectedBorderSpec)
-  readonly property int cornerRadius: Style.cornerRadius
-  property int contentMargin: Style.spacing.panelPadding
-  property int headerHeight: Math.max(Style.space(34), Style.font.title + Style.spacing.controlPaddingY * 2)
-  property int contentSpacing: Style.spacing.md
-  property int baseRowHeight: Math.max(Style.space(50), Style.font.body + Style.spacing.rowPaddingX * 2)
-  property int detailRowHeight: Math.max(Style.space(58), Style.font.body + Style.font.caption + Style.spacing.rowPaddingX * 2)
+  readonly property int cornerRadius: 0
+  property int contentMargin: Style.space(10)
+  property int headerHeight: Math.max(Style.space(28), Style.font.title + Style.space(6))
+  property int contentSpacing: Style.space(4)
+  property int baseRowHeight: Math.max(Style.space(32), Style.font.body + Style.space(12))
+  property int detailRowHeight: Math.max(Style.space(36), Style.font.body + Style.font.caption + Style.space(10))
   // How much of the first hidden row stays visible at the fold — enough to
   // read as a cut-off row rather than a bottom border.
-  property int rowPeek: Math.round(baseRowHeight * 0.55)
-  property int rowSpacing: Style.spacing.xs
-  property int dividerHeight: Style.space(17)
+  property int rowPeek: Math.round(baseRowHeight * 0.4)
+  property int rowSpacing: 0
+  property int dividerHeight: Style.space(8)
   property bool searchDivider: false
   property int layoutSerial: 0
   property int cardWidth: Math.min(root.dmenuActive ? Style.space(root.dmenuWidth) : ((root.activeMenu === "trigger.capture.screenrecord" || root.activeMenu === "style.font") ? Style.space(520) : Style.space(300)), panel.width - Style.gapsOut * 2)
@@ -1044,7 +1044,7 @@ Item {
 
     Rectangle {
       anchors.fill: parent
-      color: root.scrim
+      color: "transparent"
     }
 
     MouseArea {
@@ -1154,11 +1154,13 @@ Item {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            text: root.filterText || (root.dmenuActive ? (root.dmenuPrompt + "…") : ((root.item(root.activeMenu) ? (root.item(root.activeMenu).title || root.item(root.activeMenu).label) : "Go") + "…"))
+            text: root.filterText || (root.dmenuActive ? (root.dmenuPrompt + "…") : ((root.item(root.activeMenu) ? (root.item(root.activeMenu).title || root.item(root.activeMenu).label) : "SPACEX") + "…"))
             color: root.foreground
-            opacity: root.filterText ? 1 : 0.58
+            opacity: 1
             font.family: root.fontFamily
             font.pixelSize: Style.font.heading
+            font.letterSpacing: 4
+            font.capitalization: Font.AllUppercase
             elide: Text.ElideRight
           }
 
@@ -1192,7 +1194,7 @@ Item {
                 anchors.rightMargin: Style.space(4)
                 anchors.verticalCenter: parent.verticalCenter
                 height: Style.spacing.hairline
-                color: Util.alpha(root.foreground, 0.2)
+                color: "#FFFFFF"
               }
             }
 
@@ -1281,7 +1283,9 @@ Item {
                   color: row.hasCursor ? root.selectedText : root.foreground
                   font.family: root.fontFamily
                   font.pixelSize: Style.font.heading
-                  font.weight: Font.Medium
+                  font.weight: Font.Normal
+                  font.letterSpacing: 2.5
+                  font.capitalization: Font.AllUppercase
                   elide: Text.ElideRight
                 }
 
@@ -1319,7 +1323,7 @@ Item {
                 Text {
                   text: row.kind === "menu" || row.kind === "link" ? "›" : ""
                   color: row.hasCursor ? root.selectedText : root.foreground
-                  opacity: row.kind === "menu" || row.kind === "link" ? 0.36 : 0
+                  opacity: row.kind === "menu" || row.kind === "link" ? 1 : 0
                   font.family: root.fontFamily
                   font.pixelSize: Style.font.heading
                   font.weight: Font.Normal
@@ -1348,41 +1352,7 @@ Item {
             }
           }
 
-          // Scroll scrims. The clipped row already marks the fold at rest;
-          // these keep both edges honest once the list has been scrolled,
-          // when content hides above the card top as well as below. Strength
-          // tracks the distance still hidden past each edge rather than
-          // animating on a clock, so a programmatic jump — wrapping from the
-          // last row back to the first — lands with the fade already applied.
-          Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            height: Math.min(Style.space(28), parent.height / 2)
-            visible: opacity > 0
-            opacity: resultList.contentHeight > resultList.height
-              ? Math.max(0, Math.min(1, (resultList.contentY - resultList.originY) / height))
-              : 0
-            gradient: Gradient {
-              GradientStop { position: 0; color: root.background }
-              GradientStop { position: 1; color: Util.alpha(root.background, 0) }
-            }
-          }
-
-          Rectangle {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            height: Math.min(Style.space(28), parent.height / 2)
-            visible: opacity > 0
-            opacity: resultList.contentHeight > resultList.height
-              ? Math.max(0, Math.min(1, (resultList.originY + resultList.contentHeight - resultList.height - resultList.contentY) / height))
-              : 0
-            gradient: Gradient {
-              GradientStop { position: 0; color: Util.alpha(root.background, 0) }
-              GradientStop { position: 1; color: root.background }
-            }
-          }
+          // No fade scrims — SpaceX chrome is solid, not a gradient.
 
           Column {
             anchors.centerIn: parent
@@ -1392,7 +1362,7 @@ Item {
             Text {
               text: "󰈉"
               color: root.selectedText
-              opacity: 0.8
+              opacity: 1.0
               font.family: root.fontFamily
               font.pixelSize: Style.font.displayLarge
               horizontalAlignment: Text.AlignHCenter
@@ -1402,7 +1372,7 @@ Item {
             Text {
               text: root.filterText ? "No matches for “" + root.filterText + "”" : "Nothing here yet"
               color: root.foreground
-              opacity: 0.7
+              opacity: 1.0
               font.family: root.fontFamily
               font.pixelSize: Style.font.title
               horizontalAlignment: Text.AlignHCenter

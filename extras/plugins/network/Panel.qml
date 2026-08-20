@@ -83,6 +83,7 @@ Panel {
     var s = starlinkSsid.toLowerCase()
     return s.indexOf("starlink") !== -1 || s.indexOf("starklink") !== -1 || s.indexOf("star-link") !== -1
   }
+  readonly property string uiFont: "D-DIN"
   readonly property var connectionPhrases: isStarlink ? starlinkPhrases : defaultConnectionPhrases
   readonly property string connectionPhrase: connectionPhrases[connectionPhraseIndex % connectionPhrases.length]
   readonly property bool networkManagerAvailable: Networking.backend === NetworkBackendType.NetworkManager
@@ -309,8 +310,8 @@ Panel {
   // `selectedIndex`). Mouse hover and keyboard nav both mutate this state
   // at the root; items never read containsMouse for visuals. See
   // CursorSurface for the shared chrome shared by rows and pills.
-  readonly property color hoverFill: bar ? Style.hoverFillFor(bar.foreground, Color.accent) : "transparent"
-  readonly property color selectedFill: bar ? Style.selectedFillFor(bar.foreground, Color.accent) : "transparent"
+  readonly property color hoverFill: "#FFFFFF"
+  readonly property color selectedFill: "#FFFFFF"
 
   // scannerEnabled lives on the shared WifiDevice, which has no reference
   // counting, and a bar widget is instantiated once per monitor. Tracking the
@@ -1110,11 +1111,11 @@ Panel {
 
         Canvas {
           anchors.fill: parent
-          opacity: 0.35
+          opacity: 1.0
           onPaint: {
             var ctx = getContext("2d")
             ctx.clearRect(0, 0, width, height)
-            ctx.fillStyle = "#C4C8CC"
+            ctx.fillStyle = "#FFFFFF"
             var seed = 7
             for (var i = 0; i < 28; i++) {
               seed = (seed * 1103515245 + 12345) & 0x7fffffff
@@ -1131,7 +1132,7 @@ Panel {
         Rectangle {
           anchors.fill: parent
           color: "transparent"
-          border.color: "#C4C8CC"
+          border.color: "#FFFFFF"
           border.width: 1
         }
 
@@ -1141,18 +1142,19 @@ Panel {
           spacing: 2
           Text {
             anchors.horizontalCenter: parent.horizontalCenter
-            text: "CONSTELLATION LINK"
+            text: "STARLINK"
             color: root.bar.foreground
-            font.family: root.bar.fontFamily
+            font.family: root.uiFont
             font.pixelSize: Style.font.caption
-            font.letterSpacing: 3
+            font.letterSpacing: 6
+            font.capitalization: Font.AllUppercase
             font.bold: true
           }
           Text {
             anchors.horizontalCenter: parent.horizontalCenter
             text: "DISH LOCKED  ·  BENDING LIGHT"
-            color: Qt.darker(root.bar.foreground, 1.35)
-            font.family: root.bar.fontFamily
+            color: "#FFFFFF"
+            font.family: root.uiFont
             font.pixelSize: Style.font.caption
             font.letterSpacing: 1.4
           }
@@ -1171,7 +1173,7 @@ Panel {
           color: root.bar.foreground
           font.family: root.bar.fontFamily
           font.pixelSize: Style.font.display
-          opacity: root.networkManagerAvailable ? 1.0 : 0.5
+          opacity: 1.0
           anchors.left: parent.left
           anchors.verticalCenter: parent.verticalCenter
         }
@@ -1184,13 +1186,13 @@ Panel {
           anchors.right: parent.right
           anchors.verticalCenter: parent.verticalCenter
 
-          Button {
+          InvertButton {
             id: qrAction
             visible: root.canShareWifi
             iconText: "󰐲"
             tooltipText: "Show QR code"
             foreground: root.bar.foreground
-            fontFamily: root.bar.fontFamily
+            fontFamily: root.uiFont
             iconSize: Style.font.subtitle * 1.5
             horizontalPadding: Style.space(5)
             verticalPadding: Style.space(2)
@@ -1200,13 +1202,13 @@ Panel {
             onClicked: root.summonWifiQr()
           }
 
-          Button {
+          InvertButton {
             id: speedAction
             visible: root.canRunSpeedTest
             iconText: "󰓅"
             tooltipText: "Run a speed test"
             foreground: root.bar.foreground
-            fontFamily: root.bar.fontFamily
+            fontFamily: root.uiFont
             iconSize: Style.font.subtitle * 1.5
             horizontalPadding: Style.space(5)
             verticalPadding: Style.space(2)
@@ -1229,7 +1231,7 @@ Panel {
             PanelToolTip {
               visible: powerSwitch.containsMouse
               text: root.toggleHint
-              fontFamily: root.bar.fontFamily
+              fontFamily: root.uiFont
             }
           }
         }
@@ -1258,7 +1260,7 @@ Panel {
 
             text: heroSsid.detail !== "" ? heroSsid.title + " (" + heroSsid.detail + ")" : heroSsid.title
             color: root.bar.foreground
-            font.family: root.bar.fontFamily
+            font.family: root.uiFont
             font.pixelSize: Style.font.title
             font.bold: true
             elide: Text.ElideRight
@@ -1278,8 +1280,8 @@ Panel {
               return ""
             }
             visible: text !== ""
-            color: Qt.darker(root.bar.foreground, 1.4)
-            font.family: root.bar.fontFamily
+            color: "#FFFFFF"
+            font.family: root.uiFont
             font.pixelSize: Style.font.caption
             font.bold: true
             font.letterSpacing: 1.2
@@ -1364,7 +1366,7 @@ Panel {
             id: bandHeader
             text: root.bandSectionTitle
             foreground: root.bar.foreground
-            fontFamily: root.bar.fontFamily
+            fontFamily: root.uiFont
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
           }
@@ -1379,7 +1381,7 @@ Panel {
               id: bandAutoLabel
               text: "AUTOMATIC"
               foreground: root.bar.foreground
-              fontFamily: root.bar.fontFamily
+              fontFamily: root.uiFont
               anchors.verticalCenter: parent.verticalCenter
             }
 
@@ -1412,7 +1414,7 @@ Panel {
                 text: root.bandPinned
                   ? "Let Wi-Fi pick the band"
                   : "Stay on " + root.bandLabel(root.bandCurrent)
-                fontFamily: root.bar.fontFamily
+                fontFamily: root.uiFont
               }
             }
           }
@@ -1484,7 +1486,7 @@ Panel {
         PanelSectionHeader {
           text: "DNS PROVIDER"
           foreground: root.bar.foreground
-          fontFamily: root.bar.fontFamily
+          fontFamily: root.uiFont
         }
 
         Row {
@@ -1540,7 +1542,7 @@ Panel {
         visible: root.wifiStationAvailable && root.scanning
         text: "SCANNING WI-FI…"
         foreground: root.bar.foreground
-        fontFamily: root.bar.fontFamily
+        fontFamily: root.uiFont
       }
 
       // Scrollable network list — cap the height so a busy neighbourhood
@@ -1583,7 +1585,7 @@ Panel {
               visible: sectionTitle !== ""
               text: sectionTitle
               foreground: root.bar.foreground
-              fontFamily: root.bar.fontFamily
+              fontFamily: root.uiFont
               height: visible ? implicitHeight : 0
             }
 
@@ -1604,7 +1606,7 @@ Panel {
   // `selected` (bold) is the pinned choice; with Automatic on nothing is
   // pinned, so only the live band lights up and the two can no longer read as
   // a contradiction. They land on the same pill once a band is pinned.
-  component BandPill: Button {
+  component BandPill: InvertButton {
     id: pill
     required property string band
     required property int slot
@@ -1612,14 +1614,14 @@ Panel {
     text: root.bandLabel(band)
     tooltipText: root.bandTooltip(band)
     fontSize: Style.font.bodySmall
-    foreground: root.bar.foreground
-    fontFamily: root.bar.fontFamily
+    foreground: (hasCursor || active) ? "#000000" : "#FFFFFF"
+    fontFamily: root.uiFont
     horizontalPadding: Style.spacing.controlPaddingX
     verticalPadding: Style.spacing.controlPaddingY + Style.space(2)
     bordered: true
 
-    active: root.bandCurrent === band
-    selected: root.bandEffective === band
+    active: root.bandEffective === band
+    selected: false
     hasCursor: root.cursorActive && root.focusSection === "band"
       && !root.bandAutoFocused && root.bandIndex === slot
 
@@ -1636,15 +1638,15 @@ Panel {
   // One DNS provider pill. The cursor + current visuals come entirely from
   // CursorSurface; this component just binds them to the panel's cursor
   // state and renders the label/tooltip/click target.
-  component DnsProviderPill: Button {
+  component DnsProviderPill: InvertButton {
     id: pill
     required property string provider
     required property int index
 
     text: provider
     fontSize: Style.font.bodySmall
-    foreground: root.bar.foreground
-    fontFamily: root.bar.fontFamily
+    foreground: (hasCursor || active) ? "#000000" : "#FFFFFF"
+    fontFamily: root.uiFont
     horizontalPadding: Style.spacing.controlPaddingX
     verticalPadding: Style.spacing.controlPaddingY + Style.space(2)
     bordered: true
@@ -1653,6 +1655,7 @@ Panel {
     // `current DNS` is the pill's `active` fill; the keyboard cursor lights
     // up `hasCursor`.
     active: root.dnsProvider === provider
+    selected: false
     hasCursor: root.cursorActive && root.focusSection === "dns" && root.dnsIndex === index
 
     onHovered: function(isHovered) {
@@ -1685,6 +1688,7 @@ Panel {
 
     hasCursor: root.cursorActive && isSelected && !root.wifiActionFocused
     current: isConnected
+    readonly property bool inverted: hasCursor || current
     foreground: root.bar.foreground
     fill: root.hoverFill
     currentFill: root.selectedFill
@@ -1736,7 +1740,7 @@ Panel {
       if (isFailed) return root.bar.urgent
       if (isBusy) return root.bar.foreground
       if (isConnected) return root.bar.foreground
-      return Qt.darker(root.bar.foreground, 1.5)
+      return "#FFFFFF"
     }
 
     implicitHeight: rowBody.implicitHeight + (isPasswordOpen ? passwordPanel.implicitHeight + Style.spacing.md : 0)
@@ -1789,8 +1793,8 @@ Panel {
       Text {
         id: networkIcon
         text: row.net ? root.wifiIconFor(row.net.signal) : ""
-        color: row.statusColor
-        font.family: root.bar.fontFamily
+        color: row.inverted ? "#000000" : row.statusColor
+        font.family: root.uiFont
         font.pixelSize: Style.font.title
         anchors.left: parent.left
         anchors.verticalCenter: parent.verticalCenter
@@ -1812,8 +1816,8 @@ Panel {
           anchors.verticalCenter: parent.verticalCenter
           horizontalAlignment: Text.AlignHCenter
           text: row.forgetVisible ? "󰅙" : "󰌾"
-          color: row.forgetVisible ? root.bar.urgent : Qt.darker(root.bar.foreground, 1.4)
-          font.family: root.bar.fontFamily
+          color: row.inverted ? "#000000" : "#FFFFFF"
+          font.family: root.uiFont
           font.pixelSize: Style.font.subtitle
         }
 
@@ -1840,7 +1844,7 @@ Panel {
         PanelToolTip {
           visible: rightMouse.containsMouse || row.forgetFocused
           text: "Forget network"
-          fontFamily: root.bar.fontFamily
+          fontFamily: root.uiFont
         }
       }
 
@@ -1855,8 +1859,8 @@ Panel {
 
         Text {
           text: row.net ? (row.net.ssid || "Hidden") : ""
-          color: root.bar.foreground
-          font.family: root.bar.fontFamily
+          color: row.inverted ? "#000000" : root.bar.foreground
+          font.family: root.uiFont
           font.pixelSize: Style.font.body
           elide: Text.ElideRight
           width: parent.width
@@ -1870,8 +1874,8 @@ Panel {
           text: row.statusText
           visible: row.statusText !== ""
           height: visible ? implicitHeight : 0
-          color: row.statusColor
-          font.family: root.bar.fontFamily
+          color: row.inverted ? "#000000" : row.statusColor
+          font.family: root.uiFont
           font.pixelSize: Style.font.caption
           elide: Text.ElideRight
           width: parent.width
@@ -1973,7 +1977,7 @@ Panel {
           verticalAlignment: Text.AlignVCenter
           text: row.isFailed ? "Wrong password" : "Connecting..."
           color: row.isFailed ? root.bar.urgent : root.bar.foreground
-          font.family: root.bar.fontFamily
+          font.family: root.uiFont
           font.pixelSize: Style.font.bodySmall
         }
       }
@@ -1990,7 +1994,7 @@ Panel {
         iconText: "󰄬"
         tooltipText: "Connect"
         foreground: root.bar.foreground
-        fontFamily: root.bar.fontFamily
+        fontFamily: root.uiFont
         onClicked: row.submitCredentials()
       }
     }
@@ -2016,20 +2020,20 @@ Panel {
     PanelToolTip {
       visible: valueMouse.enabled && valueMouse.containsMouse
       text: tooltipText
-      fontFamily: root.bar.fontFamily
+      fontFamily: root.uiFont
     }
   }
 
   component InfoLabel: Text {
     color: root.bar.foreground
-    opacity: 0.6
-    font.family: root.bar.fontFamily
+    opacity: 1.0
+    font.family: root.uiFont
     font.pixelSize: Style.font.bodySmall
   }
 
   component InfoValue: Text {
     color: root.bar.foreground
-    font.family: root.bar.fontFamily
+    font.family: root.uiFont
     font.pixelSize: Style.font.bodySmall
   }
 }
